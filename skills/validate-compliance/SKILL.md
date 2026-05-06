@@ -20,8 +20,12 @@ For each file created or modified:
 | net | Services end with `Service`, Repositories end with `Repository`, Controllers end with `Controller`, no `Handler`, `Manager`, `Helper` suffixes |
 | ang | Components end with `Component`, Services end with `Service`, Guards end with `Guard` |
 | nest | Controllers end with `Controller`, Services end with `Service`, Guards end with `Guard` |
-| next | Pages in `app/` or `pages/`, components in `components/` |
-| python | Routers end with `router`, services end with `service` or `_service`, repos end with `repository` |
+| pyt | Routers end with `router`, services end with `service` or `_service`, repos end with `repository` |
+| pytml | Same as `pyt` plus ML pipeline modules end with `pipeline`, trainers end with `trainer` |
+| dataeng | Notebooks end with `_nb`, pipelines end with `_pipeline`, transformers end with `_transformer` |
+| kot | ViewModels end with `ViewModel`, Repositories end with `Repository`, UseCases end with `UseCase` |
+| swf | ViewModels end with `ViewModel`, Repositories end with `Repository`, Services end with `Service` |
+| wps | Block files end with `-block`, templates end with `-template` |
 
 **Block if**: any class/file violates the naming convention.
 
@@ -43,7 +47,8 @@ Verify layer dependencies are not violated:
 |---|---|
 | net | Core → nothing; Application → Core only; Infrastructure → Application + Core; API → Application only |
 | ang | Core → nothing; Application → Core; Infrastructure → Application; Presentation → Application |
-| nest / next / python | Similar clean architecture constraints per factory CLAUDE.md |
+| nest / pyt / pytml | Similar clean architecture constraints — read `references/<factory>/CLAUDE.md` for specifics |
+| dataeng / kot / swf / wps | Read `references/<factory>/CLAUDE.md` for layer rules specific to each stack |
 
 **Block if**: a lower layer imports from a higher layer (e.g., Core importing from Application).
 
@@ -61,7 +66,7 @@ Verify that cross-layer imports use the project's configured aliases, not relati
 
 For every new service/repository/adapter created:
 - Verify it is registered in the DI container file
-- net: `*DependencyInjection.cs` | ang: `*.module.ts` | nest: `*.module.ts` | next: provider config | python: `dependencies.py`
+- net: `*DependencyInjection.cs` | ang: `*.module.ts` | nest: `*.module.ts` | pyt / pytml: `dependencies.py` or `container.py` | others: see `references/<factory>/CLAUDE.md`
 
 **Block if**: a new class exists but is not registered.
 
