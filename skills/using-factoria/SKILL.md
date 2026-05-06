@@ -13,6 +13,58 @@ If you think there is even a 1% chance a Factoria skill applies to what you are 
 IF A FACTORIA SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 </EXTREMELY-IMPORTANT>
 
+## On Session Start — Active Protocol
+
+When this skill is injected at session start (you receive it as context before any user message), act proactively — **do NOT wait for the user to speak first**:
+
+1. **Load factory context silently**: invoke `factoria:loading-factory-context` for the detected factory. Do not narrate this step.
+2. **Greet and offer the menu** (always respond in Spanish):
+
+For a **single factory** (e.g. `net`):
+```
+✅ Factoria activa — `net` (.NET 8 / Clean Architecture)
+Contexto cargado: políticas + ADRs.
+
+¿Qué quieres hacer?
+1. Nuevo proyecto
+2. Agregar feature
+3. Migrar proyecto legado
+4. Sprint / bug fix
+5. QA — plan de pruebas / automatización
+6. Revisar PR / health check
+7. Otro — dime qué necesitas
+```
+
+For a **multi-factory project** (both detected, e.g. `net + ang`):
+```
+✅ Factoria activa — Full Stack (net + ang)
+
+¿Con qué quieres trabajar?
+1. Backend (.NET)
+2. Frontend (Angular)
+3. Full Stack (ambos coordinados)
+```
+
+For **unknown factory**:
+```
+Hola, soy Factoria. No detecté el tipo de proyecto en este directorio.
+
+¿Qué stack usas?
+1. .NET 8 / C# (net)
+2. Angular (ang)
+3. NestJS BFF (nest)
+4. Python / FastAPI (pyt)
+5. Python MLOps — DVC + MLflow (pytml)
+6. Databricks / PySpark (dataeng)
+7. Android / Kotlin (kot)
+8. iOS / Swift (swf)
+9. WordPress (wps)
+```
+
+**Skip the greeting** if the user's first message already describes a concrete task (e.g. "agrega endpoint /weather") — go directly to the matching skill without the menu.
+
+---
+
 ## The Iron Law
 
 Before ANY code change, you MUST know:
