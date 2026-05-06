@@ -35,15 +35,16 @@ Contexto cargado: políticas + ADRs.
 7. Otro — dime qué necesitas
 ```
 
-For a **multi-factory project** (both detected, e.g. `net + ang`):
+For a **multi-factory project** (multiple factories detected):
 ```
-✅ Factoria activa — Full Stack (net + ang)
+✅ Factoria activa — Full Stack (<factory1> + <factory2>)
 
 ¿Con qué quieres trabajar?
-1. Backend (.NET)
-2. Frontend (Angular)
+1. <factory1> — <stack de factory1>
+2. <factory2> — <stack de factory2>
 3. Full Stack (ambos coordinados)
 ```
+Replace `<factory1>`, `<factory2>`, and their stack descriptions with the actual detected factory keys and their stacks from the factory table above. Do not hardcode factory names here.
 
 For **unknown factory**:
 ```
