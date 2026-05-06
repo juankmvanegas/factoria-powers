@@ -1,22 +1,22 @@
-# Factoria Powers
+﻿# Factoria Powers
 
 **Full Stack Software Factory as a multi-CLI plugin.**
 
-Factoria enforces Clean Architecture, mandatory policies, ADRs per factory, specialized agents, 30+ workflow skills, and 12 runtime enforcement hooks — distributed as a zero-runtime plugin for all major AI coding CLIs. Supports 9 factory types across web, mobile, data engineering, and MLOps.
+Factoria enforces Clean Architecture, mandatory policies, ADRs per factory, specialized agents, 30+ workflow skills, and 12 runtime enforcement hooks â€” distributed as a zero-runtime plugin for all major AI coding CLIs. Supports 9 factory types across web, mobile, data engineering, and MLOps.
 
 ## Supported CLIs
 
 | CLI | Install |
 |---|---|
-| **Claude Code** | `/plugin marketplace add factoria-org/factoria-powers` then `/plugin install factoria@factoria-powers` |
-| **Cursor** | Cursor plugin marketplace → search "factoria" |
-| **Codex App** | Codex App marketplace → search "factoria" |
-| **Codex CLI** | `codex plugin marketplace add factoria-org/factoria-powers && codex plugin install factoria` |
-| **Gemini CLI** | `gemini extensions install https://github.com/factoria-org/factoria-powers` |
-| **OpenCode** | Add `"factoria@git+https://github.com/factoria-org/factoria-powers.git"` to `opencode.json` |
-| **Factory Droid** | `droid plugin marketplace add factoria-org/factoria-powers && droid plugin install factoria` |
-| **Copilot CLI** | Plugin marketplace — search "factoria" |
-| **Manual (any CLI)** | `git clone https://github.com/factoria-org/factoria-powers ~/.claude/plugins/factoria` |
+| **Claude Code** | `/plugin marketplace add juankmvanegas/factoria-powers` then `/plugin install factoria@factoria-powers` |
+| **Cursor** | Cursor plugin marketplace â†’ search "factoria" |
+| **Codex App** | Codex App marketplace â†’ search "factoria" |
+| **Codex CLI** | `codex plugin marketplace add juankmvanegas/factoria-powers && codex plugin install factoria` |
+| **Gemini CLI** | `gemini extensions install https://github.com/juankmvanegas/factoria-powers` |
+| **OpenCode** | Add `"factoria@git+https://github.com/juankmvanegas/factoria-powers.git"` to `opencode.json` |
+| **Factory Droid** | `droid plugin marketplace add juankmvanegas/factoria-powers && droid plugin install factoria` |
+| **Copilot CLI** | Plugin marketplace â€” search "factoria" |
+| **Manual (any CLI)** | `git clone https://github.com/juankmvanegas/factoria-powers ~/.claude/plugins/factoria` |
 
 ## Factories
 
@@ -26,7 +26,7 @@ Factoria enforces Clean Architecture, mandatory policies, ADRs per factory, spec
 | `ang` | Angular 16+ | SPA, standalone components, Signals, NgRx |
 | `nest` | NestJS 11 | BFF / API Gateway, TypeORM, Guards, Interceptors |
 | `pyt` | Python FastAPI | Clean Architecture, async, Pydantic v2, SQLAlchemy 2 |
-| `pytml` | Python MLOps | FastAPI + DVC + MLflow + Databricks — ML pipelines |
+| `pytml` | Python MLOps | FastAPI + DVC + MLflow + Databricks â€” ML pipelines |
 | `dataeng` | Databricks / PySpark | Delta Lake, Medallion architecture, Unity Catalog |
 | `kot` | Android / Kotlin | MVVM, Feature Modules, Jetpack Compose |
 | `swf` | iOS / Swift | MVVM, SPM Modules, SwiftUI |

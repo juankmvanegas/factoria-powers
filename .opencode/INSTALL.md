@@ -1,4 +1,4 @@
-# Installing Factoria for OpenCode
+﻿# Installing Factoria for OpenCode
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ Add factoria to the `plugin` array in your `opencode.json` (global or project-le
 
 ```json
 {
-  "plugin": ["factoria@git+https://github.com/factoria-org/factoria-powers.git"]
+  "plugin": ["factoria@git+https://github.com/juankmvanegas/factoria-powers.git"]
 }
 ```
 
@@ -22,7 +22,7 @@ Verify by asking: "Tell me about factoria and what factory we're working with"
 
 ```json
 {
-  "plugin": ["factoria@git+https://github.com/factoria-org/factoria-powers.git#v1.0.0"]
+  "plugin": ["factoria@git+https://github.com/juankmvanegas/factoria-powers.git#v1.0.0"]
 }
 ```
 
@@ -31,7 +31,7 @@ Verify by asking: "Tell me about factoria and what factory we're working with"
 If OpenCode cannot install via git URL, try:
 
 ```powershell
-npm install factoria@git+https://github.com/factoria-org/factoria-powers.git --prefix "$HOME\.config\opencode"
+npm install factoria@git+https://github.com/juankmvanegas/factoria-powers.git --prefix "$HOME\.config\opencode"
 ```
 
 Then use:
@@ -45,7 +45,7 @@ Then use:
 ## Tool mapping (inside skills)
 
 When skills reference Claude Code tools:
-- `TodoWrite` → `todowrite`
-- `Task` with subagents → `@mention` syntax
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → your native tools
+- `TodoWrite` â†’ `todowrite`
+- `Task` with subagents â†’ `@mention` syntax
+- `Skill` tool â†’ OpenCode's native `skill` tool
+- File operations â†’ your native tools

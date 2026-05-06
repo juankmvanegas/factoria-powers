@@ -7,8 +7,8 @@
     "email": "factoria@factoria.dev",
     "url": "https://github.com/factoria-org"
   },
-  "homepage": "https://github.com/factoria-org/factoria-powers",
-  "repository": "https://github.com/factoria-org/factoria-powers",
+  "homepage": "https://github.com/juankmvanegas/factoria-powers",
+  "repository": "https://github.com/juankmvanegas/factoria-powers",
   "license": "MIT",
   "keywords": [
     "factoria",
@@ -38,9 +38,9 @@
       "I need to add a new feature to this project.",
       "Help me create a new .NET Clean Architecture project."
     ],
-    "websiteURL": "https://github.com/factoria-org/factoria-powers",
-    "privacyPolicyURL": "https://github.com/factoria-org/factoria-powers/blob/main/LICENSE",
-    "termsOfServiceURL": "https://github.com/factoria-org/factoria-powers/blob/main/LICENSE",
+    "websiteURL": "https://github.com/juankmvanegas/factoria-powers",
+    "privacyPolicyURL": "https://github.com/juankmvanegas/factoria-powers/blob/main/LICENSE",
+    "termsOfServiceURL": "https://github.com/juankmvanegas/factoria-powers/blob/main/LICENSE",
     "brandColor": "#0EA5E9",
     "screenshots": []
   }
