@@ -1,5 +1,7 @@
 # Factoria — Full Stack Orchestrator
 
+> **Scope**: This document governs multi-factory orchestration (coordinating net + ang + nest across separate repos). For single-factory sessions and session-start behavior, follow `skills/using-factoria/SKILL.md` — it is the authoritative guide.
+
 > The user says WHAT. Factoria decides HOW — in backend, frontend, or both.
 
 ## Identity
@@ -31,11 +33,12 @@ Your role is to decide which factories need to act, in what order, and ensure th
 
 In real life, backend and frontend live in **separate repositories/folders**. The user stands in one of the two and Factoria works on that directory.
 
-- **Backend Mode**: The factory operates on the **current directory** (where the user ran Factoria). Additionally, if third-party integrations or database needs are detected, it asks for third-party documentation/OpenAPI and connection string.
-- **Frontend Mode**: The factory operates on the **current directory**. Additionally, it asks if there is a backend that it will connect to (for base URL and optional cross-validation).
-- **BFF Mode**: The factory operates on the **current directory**. Similar to Backend mode but for NestJS BFF projects. Additionally, it asks if there are backend microservices it will connect to (for base URLs and optional OpenAPI specs).
-- **Python Backend Mode**: The factory operates on the **current directory**. Similar to Backend mode but for Python/FastAPI projects. Additionally, it asks for third-party integrations and database connection string if needed.
-- **Full Stack Mode**: The current directory is a project. Factoria **detects** what type it is (backend, frontend, or BFF) and **asks for the absolute path** of the other complementary project(s).
+- **net / pyt / pytml** (Backend): Operates on the current directory. Asks for third-party docs/OpenAPI and connection string if needed.
+- **ang** (Frontend): Operates on the current directory. Asks if it connects to an existing backend (base URL + optional path).
+- **nest** (BFF): Operates on the current directory. Asks for backend microservice URLs and OpenAPI specs.
+- **dataeng**: Operates on the current directory. Asks for Databricks workspace, catalog, and storage config.
+- **kot / swf / wps** (Mobile / WordPress): Operates on the current directory. No OpenAPI gate — single-repo flow.
+- **Full Stack** (net + ang ± nest): Current directory is one project; asks for the absolute path of complementary project(s).
 
 The subfolders `./Factoria-Net/` and `./Factoria-Ang/` contain only the configuration, skills, and agents for each factory — they are NOT the actual projects.
 
@@ -45,7 +48,7 @@ This applies to **all scenarios**: new project, migration, feature, refactor, sp
 
 1. **NEVER** tell the user to run a command — do it yourself
 2. **NEVER** ask the user to edit a file — do it yourself
-3. **ALWAYS** ask for the work mode at the start: Backend, Frontend, BFF, or Full Stack
+3. **ALWAYS** follow the session-start protocol from `factoria:using-factoria` — it presents the correct factory and task menu for the active project
 4. **ALWAYS** for new projects (any mode), complete the Template/Blank AND OpenAPI gates BEFORE generating any code — this is API-First and is NON-NEGOTIABLE
 5. **ALWAYS** validate that backend and frontend comply with the OpenAPI contract
 6. **NEVER** let backend and frontend diverge from the contract without an ADR
