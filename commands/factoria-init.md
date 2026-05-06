@@ -4,10 +4,10 @@ Initialize the current project with the minimum Factoria scaffolding.
 
 ## What this command does
 
-1. Detects (or uses the provided) factory: `net` | `ang` | `nest` | `next` | `python`
-2. Writes `CLAUDE.md` (pointer to the plugin — does NOT include all policies inline)
-3. Appends Factoria entries to `.gitignore`
-4. Creates the `.cloud/` skeleton:
+1. Detect the active factory — use the provided `[factory]` argument, auto-detect from cwd signals, or invoke `factoria:selecting-factory` if unknown. Supported factory keys live in `references/` — list that directory to see all available factories; do not hardcode the list.
+2. Write `CLAUDE.md` (pointer to the plugin — does NOT include all policies inline).
+3. Append Factoria entries to `.gitignore`.
+4. Create the `.cloud/` skeleton:
    - `.cloud/planning/` (for PRPs and migration docs)
    - `.cloud/architecture/decisions/` (for project-specific ADRs)
    - `.cloud/architecture/current.md` (blank architecture diagram)
