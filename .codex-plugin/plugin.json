@@ -1,7 +1,7 @@
 {
   "name": "factoria",
-  "version": "1.1.1",
-  "description": "Factoria — Full Stack Software Factory with opinionated ADRs, policies, agents, skills and enforcement hooks for .NET, Angular, NestJS, Next.js and Python.",
+  "version": "1.1.2",
+  "description": "Factoria — Full Stack Software Factory with opinionated ADRs, policies, agents, skills and enforcement hooks for .NET, Angular, NestJS, Python (FastAPI), Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress.",
   "author": {
     "name": "Factoria Team",
     "email": "factoria@factoria.dev",
@@ -17,7 +17,12 @@
     "angular",
     "nestjs",
     "nextjs",
-    "python",
+    "pyt",
+    "pytml",
+    "dataeng",
+    "kot",
+    "swf",
+    "wps",
     "adr",
     "enforcement",
     "skills"
@@ -25,8 +30,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Factoria",
-    "shortDescription": "Full Stack Software Factory for .NET, Angular, NestJS, Next.js and Python",
-    "longDescription": "Use Factoria to enforce Clean Architecture, approved ADRs, mandatory policies (security/testing/standards) and workflow skills across your full-stack projects. Supports .NET 8, Angular 16+, NestJS 11, Next.js 14 and FastAPI.",
+    "shortDescription": "Full Stack Software Factory for .NET, Angular, NestJS, Python (FastAPI), Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress",
+    "longDescription": "Use Factoria to enforce Clean Architecture, approved ADRs, mandatory policies (security/testing/standards) and workflow skills across your full-stack projects. Supports .NET 8, Angular 16+, NestJS 11, FastAPI, Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress.",
     "developerName": "Factoria Team",
     "category": "Coding",
     "capabilities": [

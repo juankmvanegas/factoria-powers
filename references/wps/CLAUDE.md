@@ -1,5 +1,7 @@
 # Factoria — WordPress Block Theme Expert Agent
 
+> **Note:** Runtime enforcement hooks (.cjs guards) currently cover .NET/Angular/NestJS only. For this factory, run `/factoria-validate` to invoke the validate-compliance skill, which performs the same checks textually.
+
 > "Build modern WordPress sites with reusable Gutenberg blocks, atomic design components, and Full-Site Editing — autonomously."
 
 ## Identity

@@ -1,29 +1,35 @@
 ---
 name: nest-update-factory
-description: "Use when the factory configuration or plugin needs to be updated with new skills, ADRs, or policies"
----
-
----
-name: update-factory
-description: "Update Factoria to the latest version from MCP server"
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: "Use when the Factoria plugin needs to be updated to the latest version with new skills, ADRs, or policies"
 user-invocable: true
 ---
 
-# Skill: Update Factory
+# Update Factory
 
 ## Purpose
 
-Check for updates from the Factoria MCP server and apply new skills, policies, or ADRs.
+Update the Factoria plugin to the latest version so this NestJS project gets new skills, policies, and ADRs.
 
-## Execution Flow
+## How to Update
 
-1. Call MCP: `sync_project(factory: "nest")`
-2. Review sync report for new/updated documents
-3. If updates found: inform user and ask to re-bootstrap
-4. Apply updates while preserving project-specific customizations
+Use your CLI's native update command:
 
-## Rules
+| CLI | Command |
+|-----|---------|
+| Claude Code | `/plugin install factoria@factoria-powers` |
+| Copilot CLI | `copilot plugin install factoria@factoria-powers` |
+| Codex CLI | `codex plugin install factoria@factoria-powers` |
+| Gemini CLI | `gemini extensions update factoria` |
+| Factory Droid | `droid plugin install factoria@factoria-powers` |
 
-- NEVER overwrite project-specific files without user confirmation
-- Always show what changed before applying
+## After Updating
+
+1. Check `RELEASE-NOTES.md` in the plugin directory for what changed
+2. Reload factory context in the current session: invoke skill `factoria:loading-factory-context`
+3. If ADRs or policies changed, review them before continuing work
+
+## Notes
+
+- The plugin lives in your CLI's plugins directory — not inside this project
+- All updates are non-destructive — this project's `.cloud/` files are not affected
+- To reinstall from scratch: `juankmvanegas/factoria-powers`

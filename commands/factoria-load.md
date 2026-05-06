@@ -17,4 +17,4 @@ Do not hardcode file counts or names — use Glob on the actual directories.
 
 - Starting a session where the auto-bootstrap did not fire
 - Switching factories in a multi-factory project
-- After `git pull` on the plugin (context may have changed)
+- After `/factoria-update` on the plugin (context may have changed)

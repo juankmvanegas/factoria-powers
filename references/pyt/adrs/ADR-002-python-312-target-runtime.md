@@ -10,7 +10,7 @@ Accepted
 Choosing a Python version impacts the language features available, performance characteristics, library compatibility, and long-term support timeline. We need to standardize on a minimum Python version that provides modern language features while maintaining broad ecosystem support.
 
 ## Decision
-We adopt **Python 3.12+** as the minimum target runtime for all Factoria-Python projects.
+We adopt **Python 3.12+** as the minimum target runtime for all Factoria-Pyt projects.
 
 Key features that justify this choice:
 

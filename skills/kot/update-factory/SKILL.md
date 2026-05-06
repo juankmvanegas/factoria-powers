@@ -1,84 +1,35 @@
 ---
 name: kot-update-factory
-description: "Update configuration from MCP server"
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: "Use when the Factoria plugin needs to be updated to the latest version with new skills, ADRs, or policies"
 user-invocable: true
 ---
 
-# Update Factory — Sync with MCP
+# Update Factory
 
 ## Purpose
 
-Update the local versions of skills, policies, and ADRs with the latest versions from the central MCP server.
+Update the Factoria plugin to the latest version so this Kotlin/Android project gets new skills, policies, and ADRs.
 
-## Process
+## How to Update
 
-1. **Call** MCP tool `sync_project(factory: "kot")`
-2. **Compare** local versions with server
-3. **Show** list of available changes
-4. **Ask** the user what to update
-5. **Download** and apply updates
-6. **Document** changes in CHANGELOG
+Use your CLI's native update command:
 
-## sync_project Output
+| CLI | Command |
+|-----|---------|
+| Claude Code | `/plugin install factoria@factoria-powers` |
+| Copilot CLI | `copilot plugin install factoria@factoria-powers` |
+| Codex CLI | `codex plugin install factoria@factoria-powers` |
+| Gemini CLI | `gemini extensions update factoria` |
+| Factory Droid | `droid plugin install factoria@factoria-powers` |
 
-```json
-{
-  "factory": "kot",
-  "total_documents": 45,
-  "updated_since": "2024-01-01T00:00:00Z",
-  "updated_count": 3,
-  "updated_documents": [
-    {
-      "uri": "factoria://skill/kot/security-scan",
-      "name": "security-scan",
-      "type": "skill",
-      "lastModified": "2024-06-15T10:30:00Z"
-    },
-    ...
-  ]
-}
-```
+## After Updating
 
-## User Interface
+1. Check `RELEASE-NOTES.md` in the plugin directory for what changed
+2. Reload factory context in the current session: invoke skill `factoria:loading-factory-context`
+3. If ADRs or policies changed, review them before continuing work
 
-```
-📥 Updates available from Factoria MCP
+## Notes
 
-| Document | Type | Modified |
-|----------|------|----------|
-| security-scan | skill | 2024-06-15 |
-| testing-policy | policy | 2024-06-10 |
-| ADR-015 | adr | 2024-06-08 |
-
-What would you like to update?
-  1. Everything
-  2. Skills only
-  3. Policies only
-  4. ADRs only
-  5. Select individually
-  6. Cancel
-
-> 
-```
-
-## Post-Update
-
-1. Run `health-check` to verify compatibility
-2. Document in CHANGELOG:
-   ```markdown
-   ## [Unreleased]
-   ### Changed
-   - Updated skill security-scan from Factoria MCP
-   - Updated testing-policy from Factoria MCP
-   ```
-3. If there are breaking changes in policies → review existing code
-
-## If the Project is Ejected
-
-```
-⚠️ This project is in standalone mode (ejected).
-
-It cannot sync with the MCP server.
-To reconnect, re-run the Factoria setup.
-```
+- The plugin lives in your CLI's plugins directory — not inside this project
+- All updates are non-destructive — this project's `.cloud/` files are not affected
+- To reinstall from scratch: `juankmvanegas/factoria-powers`

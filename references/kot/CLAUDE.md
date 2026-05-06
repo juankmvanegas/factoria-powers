@@ -1,5 +1,7 @@
 # Factoria — Agent-First Android/Kotlin Software Factory
 
+> **Note:** Runtime enforcement hooks (.cjs guards) currently cover .NET/Angular/NestJS only. For this factory, run `/factoria-validate` to invoke the validate-compliance skill, which performs the same checks textually.
+
 > The user says WHAT. Factoria decides HOW.
 
 ## Identity
@@ -59,7 +61,7 @@ When during the execution of any task you detect that:
 
 > *"Detecté que [descripción de la tarea] podría ser un skill reutilizable. ¿Quieres que lo cree con `/skill-creator`?"*
 
-If the user **approves**: create the skill, register it in this file and in the MCP Server.
+If the user **approves**: create the skill, register it in this file.
 If the user **rejects**: execute the task normally without creating a skill.
 If the user **requests modifications**: adjust the proposal and ask again.
 
@@ -477,7 +479,7 @@ User request
 │   └─> /health-check
 │
 └── Other
-    └─> Use get_factory_context to determine approach
+    └─> Read references/<factory>/CLAUDE.md to determine approach
 ```
 
 ## Auto-Chain

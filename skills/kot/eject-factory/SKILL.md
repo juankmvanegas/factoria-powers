@@ -1,7 +1,6 @@
 ---
 name: kot-eject-factory
-description: "Export Factoria configuration as standalone local files"
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: "Use when the project needs to operate standalone without the Factoria plugin installed"
 user-invocable: true
 ---
 
@@ -9,68 +8,50 @@ user-invocable: true
 
 ## Purpose
 
-Export all Factoria configuration (skills, agents, policies, ADRs) as local files so the project can operate without connection to the MCP server.
+Copy all Factoria policies, ADRs, and configuration from the plugin into the project so it can operate independently — without the Factoria plugin installed. After ejection, all governance files live inside the project repository.
 
-## Process
+## Execution Flow
 
-1. Create `.factory/` structure in the project
-2. Copy all configuration files:
-   - `.factory/skills/` — All skills
-   - `.factory/agents/` — All agents
-   - `.factory/policies/` — All policies
-   - `.factory/adrs/` — All ADRs
-   - `.factory/PRPs/` — PRP template
-3. Generate standalone `CLAUDE.md` that does not depend on MCP
-4. Update internal references to use local paths
+### Step 1 — Confirm Intent
 
-## Output Structure
+Show to the user before proceeding:
 
 ```
-proyecto/
-  .factory/
-    skills/
-      add-feature/SKILL.md
-      security-scan/SKILL.md
-      ...
-    agents/
-      orchestrator-agent.md
-      execution-agent.md
-      ...
-    policies/
-      security-policy.md
-      testing-policy.md
-      coding-standards.md
-    adrs/
-      ADR-001-*.md
-      ADR-002-*.md
-      ...
-    PRPs/
-      prp-base.md
-  CLAUDE.md  ← Updated for local references
+⚠️ Eject Factory — Standalone Mode
+
+After ejection this project:
+- Will NOT receive automatic policy/ADR updates from the Factoria plugin
+- Must maintain its own governance files manually
+- Will still have all current policies, ADRs, and coding standards
+
+Recommended for: offline environments, locked-version governance, legacy projects.
+
+Continue? (y/n)
 ```
 
-## Warnings
+### Step 2 — Copy Factory References
 
-Show to the user before executing:
+Read files from the plugin and write them into the project:
+- Glob `references/kot/policies/*.md` → copy each to `.factory/policies/`
+- Glob `references/kot/adrs/*.md` → copy each to `.factory/adrs/`
+- Read `references/kot/CLAUDE.md` → Write to `.factory/CLAUDE.md`
 
-```
-⚠️ WARNING: Eject Factory
-   
-   Upon executing eject, the project will:
-   - Be DISCONNECTED from central updates
-   - Not receive new skills, policies, or ADRs automatically
-   - Need to maintain its configuration manually
-   
-   Recommended only for:
-   - Projects that need to work offline
-   - Legacy projects that will not update
-   
-   Continue? (y/n)
-```
+### Step 3 — Update Project CLAUDE.md
 
-## Post-Eject
+Rewrite the project's `CLAUDE.md` to be self-contained:
+- Remove the pointer to `factoria:using-factoria`
+- Add content from `.factory/CLAUDE.md`
+- Add at the top: `# Standalone Project (Ejected from Factoria-Kot)`
 
-After eject:
-1. Remove MCP configuration from `.vscode/mcp.json` or `.claude/settings.local.json`
-2. Update `CLAUDE.md` to remove references to MCP tools
-3. Document in README that the project is in standalone mode
+### Step 4 — Verify
+
+- Glob `.factory/` to confirm all files were copied
+- Grep for any remaining `factoria://` URIs in project files (must be zero)
+- Report summary: files created, policies included, ADRs included
+
+## Rules
+
+- NEVER delete the original plugin files — copy only
+- ALWAYS preserve all policy and ADR content exactly
+- ALWAYS show the ejection summary after completing
+- Add a note in `README.md` that the project is in standalone mode

@@ -10,7 +10,7 @@ Accepted
 Continuous integration and continuous deployment are essential for maintaining code quality and enabling frequent, reliable releases. We need a CI/CD platform that integrates with our GitHub-hosted repositories, supports our full test and quality pipeline, and provides the flexibility to build and deploy Docker images to our cloud infrastructure.
 
 ## Decision
-We adopt **GitHub Actions** as the CI/CD platform for all Factoria-Python projects.
+We adopt **GitHub Actions** as the CI/CD platform for all Factoria-Pyt projects.
 
 ### Pipeline Stages (Strict Order)
 

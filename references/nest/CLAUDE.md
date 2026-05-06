@@ -46,7 +46,7 @@ When during the execution of any task you detect that:
 
 > *"I detected that [task description] could be a reusable skill. Do you want me to create it with `/skill-creator`?"*
 
-If the user **approves**: create the skill, register it in this file and in the MCP Server.
+If the user **approves**: create the skill, register it in this file.
 If the user **rejects**: execute the task normally without creating a skill.
 If the user **requests modifications**: adjust the proposal and ask again.
 

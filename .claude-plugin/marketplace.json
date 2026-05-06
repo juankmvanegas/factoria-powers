@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "factoria",
-      "description": "Factoria — Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement hooks for .NET, Angular, NestJS, Next.js and Python projects",
-      "version": "1.1.1",
+      "description": "Factoria — Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement hooks for .NET, Angular, NestJS, Python (FastAPI), Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress projects",
+      "version": "1.1.2",
       "source": "./",
       "author": {
         "name": "Factoria Team",

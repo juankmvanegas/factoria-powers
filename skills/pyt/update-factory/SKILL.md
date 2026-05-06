@@ -1,77 +1,35 @@
-﻿---
+---
 name: pyt-update-factory
-description: "Use when the factory configuration or plugin needs to be updated with new skills, ADRs, or policies"
----
-
----
-name: update-factory
-description: "Update Factoria-Python skills, policies, and ADRs from MCP server"
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: "Use when the Factoria plugin needs to be updated to the latest version with new skills, ADRs, or policies"
 user-invocable: true
 ---
 
-# Skill: Update Factory
+# Update Factory
 
 ## Purpose
 
-Check for and apply updates to Factoria-Python governance files (skills, policies, ADRs) from the MCP server. Ensures the project stays aligned with the latest factory standards without losing project-specific customizations.
+Update the Factoria plugin to the latest version so this Python (FastAPI) project gets new skills, policies, and ADRs.
 
-## When to Use
+## How to Update
 
-- When notified that new factory updates are available
-- Periodically to check for policy or ADR updates
-- After the Factoria MCP server has been updated
-- When onboarding a project that may have outdated factory files
+Use your CLI's native update command:
 
-## Execution Flow â€” 6 Strict Steps
+| CLI | Command |
+|-----|---------|
+| Claude Code | `/plugin install factoria@factoria-powers` |
+| Copilot CLI | `copilot plugin install factoria@factoria-powers` |
+| Codex CLI | `codex plugin install factoria@factoria-powers` |
+| Gemini CLI | `gemini extensions update factoria` |
+| Factory Droid | `droid plugin install factoria@factoria-powers` |
 
-1. **Check current versions** â€” Inventory local Factoria files:
-   - List all skills in `.claude/skills/` with their content hashes
-   - List all policies in `.cloud/policies/` with their content hashes
-   - List all ADRs in `.cloud/architecture/decisions/` with their content hashes
-   - List all agents in `.ai/agents/` with their content hashes
-   - Record last sync timestamp from `.cloud/planning/last-sync.md`
+## After Updating
 
-2. **Fetch latest from MCP** â€” Query the Factoria MCP server:
-   - Use `get-factory-context` tool to get current factory state
-   - Compare local versions against server versions
-   - Identify: new files, updated files, deprecated files
+1. Check `RELEASE-NOTES.md` in the plugin directory for what changed
+2. Reload factory context in the current session: invoke skill `factoria:loading-factory-context`
+3. If ADRs or policies changed, review them before continuing work
 
-3. **Classify changes** â€” For each difference:
-   - **New** â€” File exists on server but not locally (safe to add)
-   - **Updated** â€” File exists both places but differs (needs merge review)
-   - **Locally modified** â€” User has customized a factory file (preserve customizations)
-   - **Deprecated** â€” File exists locally but removed from server (flag for review)
+## Notes
 
-4. **Apply updates** â€” With user approval:
-   - Add new files directly
-   - For updated files: show diff, ask user to approve each change
-   - For locally modified files: show both versions, let user choose
-   - For deprecated files: warn but do not auto-delete
-
-5. **Re-bootstrap if needed** â€” If major structural changes:
-   - New skill directories to create
-   - New agent definitions to add
-   - Updated CLAUDE.md template to apply
-   - Run re-bootstrap with merge strategy (not overwrite)
-
-6. **Update sync record** â€” Write to `.cloud/planning/last-sync.md`:
-   - Sync timestamp
-   - Files added, updated, skipped
-   - Next recommended sync date
-
-## Auto-Shielding
-
-- NEVER overwrite locally modified files without user approval
-- NEVER auto-delete deprecated files
-- ALWAYS show diffs before applying updates
-- ALWAYS preserve project-specific customizations
-
-## Rules
-
-- Updates are opt-in â€” the user approves each change
-- Locally modified files are NEVER silently overwritten
-- New policies are always added (they may contain new compliance requirements)
-- New ADRs are always added (they may contain new architectural decisions)
-- The sync record MUST be updated after every sync operation
-- If the MCP server is unreachable, report the error and suggest manual update
+- The plugin lives in your CLI's plugins directory — not inside this project
+- All updates are non-destructive — this project's `.cloud/` files are not affected
+- To reinstall from scratch: `juankmvanegas/factoria-powers`

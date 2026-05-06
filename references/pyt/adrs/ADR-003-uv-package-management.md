@@ -10,7 +10,7 @@ Accepted
 Python's packaging ecosystem offers multiple tools (pip, pip-tools, poetry, pdm, hatch) with varying levels of performance, reliability, and feature completeness. We need a standardized package management approach that provides fast dependency resolution, deterministic builds, and a single source of truth for project metadata.
 
 ## Decision
-We adopt **uv** as the package manager for all Factoria-Python projects.
+We adopt **uv** as the package manager for all Factoria-Pyt projects.
 
 Key aspects of this decision:
 

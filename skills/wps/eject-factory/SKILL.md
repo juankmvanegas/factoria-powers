@@ -1,71 +1,57 @@
 ---
 name: wps-eject-factory
-description: "Generate standalone project files independent of MCP factory"
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: "Use when the project needs to operate standalone without the Factoria plugin installed"
 user-invocable: true
 ---
 
-# Skill: Eject Factory
+# Eject Factory — Export to Standalone
 
 ## Purpose
 
-Generate a fully standalone project configuration that removes all dependencies on the MCP Factoria server. After ejection, the project retains all policies, ADRs, skills, and commands as local files with no external MCP calls. This enables teams to operate independently while preserving the guardrails and conventions established by the factory.
+Copy all Factoria policies, ADRs, and configuration from the plugin into the project so it can operate independently — without the Factoria plugin installed. After ejection, all governance files live inside the project repository.
 
-## Execution Flow — 6 Strict Steps
+## Execution Flow
 
-### Step 1 — Inventory Factory Dependencies
+### Step 1 — Confirm Intent
 
-- Scan the project for all MCP-related references:
-  - `.claude/` commands and skills referencing factory URIs (`factoria://`).
-  - `CLAUDE.md` references to MCP tools (`get-factory-context`, `get-workflow`, etc.).
-  - Any scripts or configs that call the MCP server endpoint.
-- List all dependencies to be resolved.
+Show to the user before proceeding:
 
-### Step 2 — Copy Policies and ADRs
+```
+⚠️ Eject Factory — Standalone Mode
 
-- Copy all `.cloud/policies/*.md` into the project as standalone files.
-- Copy all `.cloud/architecture/decisions/ADR-*.md` into the project.
-- Ensure no file references external MCP URIs — replace `factoria://policy/...` with local relative paths.
+After ejection this project:
+- Will NOT receive automatic policy/ADR updates from the Factoria plugin
+- Must maintain its own governance files manually
+- Will still have all current policies, ADRs, and coding standards
 
-### Step 3 — Localize Skills and Commands
+Recommended for: offline environments, locked-version governance, legacy projects.
 
-- Copy all `.claude/skills/*/SKILL.md` into the project.
-- Copy all `.claude/commands/*.md` into the project.
-- Remove or replace any instruction that calls MCP tools with local equivalents:
-  - `get-factory-context` → "Read local CLAUDE.md"
-  - `validate-compliance` → "Read local .cloud/policies/"
-  - `get-workflow` → "Read local .claude/skills/"
+Continue? (y/n)
+```
 
-### Step 4 — Update CLAUDE.md
+### Step 2 — Copy Factory References
 
-- Rewrite `CLAUDE.md` to be self-contained:
-  - Remove MCP server connection instructions.
-  - Replace factory tool references with local file paths.
-  - Keep all rules, conventions, and workflow instructions intact.
-  - Add a header: `# Standalone Project (Ejected from Factoria-Wps)`
+Read files from the plugin and write them into the project:
+- Glob `references/wps/policies/*.md` → copy each to `.factory/policies/`
+- Glob `references/wps/adrs/*.md` → copy each to `.factory/adrs/`
+- Read `references/wps/CLAUDE.md` → Write to `.factory/CLAUDE.md`
 
-### Step 5 — Generate Setup Script
+### Step 3 — Update Project CLAUDE.md
 
-- Create `scripts/setup-standalone.sh` that:
-  - Verifies Node.js and npm versions.
-  - Installs dependencies (`npm install`).
-  - Runs initial build (`npm run build`).
-  - Runs tests to verify baseline.
-- Make the script executable.
+Rewrite the project's `CLAUDE.md` to be self-contained:
+- Remove the pointer to `factoria:using-factoria`
+- Add content from `.factory/CLAUDE.md`
+- Add at the top: `# Standalone Project (Ejected from Factoria-Wps)`
 
-### Step 6 — Verify Ejection
+### Step 4 — Verify
 
-- Grep for any remaining `factoria://` URIs — must be zero.
-- Grep for any MCP tool names — must be zero.
-- Confirm `CLAUDE.md` has no external dependencies.
-- Run build and tests to ensure nothing broke.
-- Report ejection status: files created, references resolved, verification result.
+- Glob `.factory/` to confirm all files were copied
+- Grep for any remaining `factoria://` URIs in project files (must be zero)
+- Report summary: files created, policies included, ADRs included
 
 ## Rules
 
-- NEVER delete the original factory-connected files — create ejected copies alongside or in a separate output directory.
-- ALWAYS preserve all policies, ADRs, and conventions — ejection removes the transport, not the rules.
-- NEVER leave any `factoria://` URI in the ejected output.
-- ALWAYS verify the ejected project builds and tests pass independently.
-- NEVER modify the MCP server or factory source during ejection — this is a project-side operation only.
-- ALWAYS include the setup script so the ejected project is immediately usable.
+- NEVER delete the original plugin files — copy only
+- ALWAYS preserve all policy and ADR content exactly
+- ALWAYS show the ejection summary after completing
+- Add a note in `README.md` that the project is in standalone mode

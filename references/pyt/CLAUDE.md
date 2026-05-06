@@ -1,5 +1,7 @@
 # Factoria — Agent-First Python Software Factory
 
+> **Note:** Runtime enforcement hooks (.cjs guards) currently cover .NET/Angular/NestJS only. For this factory, run `/factoria-validate` to invoke the validate-compliance skill, which performs the same checks textually.
+
 > The user says WHAT. Factoria decides HOW.
 
 ## Identity

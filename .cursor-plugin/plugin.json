@@ -1,8 +1,8 @@
 {
   "name": "factoria",
   "displayName": "Factoria",
-  "description": "Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement for .NET, Angular, NestJS, Next.js and Python projects",
-  "version": "1.1.1",
+  "description": "Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement for .NET, Angular, NestJS, Python (FastAPI), Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress projects",
+  "version": "1.1.2",
   "author": {
     "name": "Factoria Team",
     "email": "factoria@factoria.dev"
@@ -18,7 +18,12 @@
     "angular",
     "nestjs",
     "nextjs",
-    "python"
+    "pyt",
+    "pytml",
+    "dataeng",
+    "kot",
+    "swf",
+    "wps"
   ],
   "skills": "./skills/",
   "agents": "./agents/",

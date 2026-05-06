@@ -1,5 +1,43 @@
 # Factoria Plugin — Release Notes
 
+## v1.1.2 — 2026-05-06
+
+Comprehensive sweep of residual MCP-server and 5-factory references after v1.1.x partial fixes.
+
+### Changes
+
+**SEV-1 — Runtime fixes:**
+- `skills/{nest,kot,pyt}/update-factory/SKILL.md`: rewrote from MCP `sync_project` call to CLI-native install table (same as `/factoria-update`)
+- `skills/{kot,wps,swf}/eject-factory/SKILL.md`: rewrote from "scrub MCP refs" narrative to actual plugin copy workflow (`references/<factory>/` → project)
+- `references/{ang,nest,net,swf,kot}/CLAUDE.md`: removed "register in MCP Server" and `get_factory_context` instructions
+- `hooks/lifecycle/auto-primer.cjs`: rewrote `detectProject()` to cover all 9 factories (was: only net/ang). Removed "Backend/Frontend/Full Stack" 4-mode labels.
+- `references/{pyt,pytml,dataeng,kot,swf,wps}/CLAUDE.md`: added enforcement coverage note — runtime `.cjs` guards cover net/ang/nest only; use `/factoria-validate` for other factories
+
+**SEV-2 — Incorrect info in user-visible manifests:**
+- All 5 plugin manifests (`.claude-plugin`, `.cursor-plugin`, `.codex-plugin`, `gemini-extension.json`, `marketplace.json`): updated description from "Next.js and Python" to full 9-factory list
+- `.codex-plugin/plugin.json`: updated `longDescription` to include all stacks
+- All 3 keyword arrays: replaced `"python"` with `"pyt"` + added `pytml`, `dataeng`, `kot`, `swf`, `wps`
+- `references/pyt/adrs/{ADR-002,ADR-003,ADR-014}`: renamed `Factoria-Python` → `Factoria-Pyt`
+- `skills/pyt/skill-creator/SKILL.md`: renamed `Factoria-Python` → `Factoria-Pyt`
+- `agents/qa-agent.md`: made factory-agnostic (was hardcoded to `Factoria-Net`)
+- `commands/factoria-load.md`: replaced `git pull` trigger with `/factoria-update`
+
+### Known limitation
+
+Runtime enforcement hooks (`.cjs` guards) cover `.cs` and `.ts` extensions only — effective for `net`, `ang`, `nest`. For the other 6 factories (`pyt`, `pytml`, `dataeng`, `kot`, `swf`, `wps`), use `/factoria-validate` which runs the same checks via the `validate-compliance` skill. Full multi-factory hook support is planned for v1.2.
+
+### Upgrade
+```
+/plugin install factoria@factoria-powers
+```
+Or reinstall:
+```
+/plugin marketplace add juankmvanegas/factoria-powers
+/plugin install factoria@factoria-powers
+```
+
+---
+
 ## v1.1.1 — 2026-05-06
 
 Fix marketplace name mismatch — `/plugin install factoria@factoria-powers` now works without manual clone.

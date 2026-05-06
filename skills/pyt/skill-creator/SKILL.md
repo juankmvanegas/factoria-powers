@@ -14,13 +14,13 @@ user-invocable: true
 
 ## Purpose
 
-Create new custom skills for the Factoria-Python ecosystem. Interviews the user about the skill's purpose, generates the SKILL.md with proper frontmatter and sections, and registers it in the project's CLAUDE.md.
+Create new custom skills for the Factoria-Pyt ecosystem. Interviews the user about the skill's purpose, generates the SKILL.md with proper frontmatter and sections, and registers it in the project's CLAUDE.md.
 
 ## When to Use
 
 - When the user needs a reusable workflow that doesn't exist yet
 - When a repeated task should be formalized into a skill
-- When extending the Factoria-Python skill catalog for project-specific needs
+- When extending the Factoria-Pyt skill catalog for project-specific needs
 
 ## Execution Flow â€” 6 Strict Steps
 
