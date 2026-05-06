@@ -40,7 +40,7 @@ In real life, backend and frontend live in **separate repositories/folders**. Th
 - **kot / swf / wps** (Mobile / WordPress): Operates on the current directory. No OpenAPI gate — single-repo flow.
 - **Full Stack** (net + ang ± nest): Current directory is one project; asks for the absolute path of complementary project(s).
 
-The subfolders `./Factoria-Net/` and `./Factoria-Ang/` contain only the configuration, skills, and agents for each factory — they are NOT the actual projects.
+Factory references live in the plugin under `references/<factory>/` — they are NOT the actual user projects.
 
 This applies to **all scenarios**: new project, migration, feature, refactor, sprint, bug fix.
 
@@ -207,7 +207,7 @@ Does this frontend connect to an existing backend?
    Example: D:/projects/my-backend
    (Type "no" if you don't have it — work will proceed with the OpenAPI only)
    ```
-   → If provided: Factoria-Ang can run `/validate-contracts` and `/sync-contracts` against the backend code (read-only, NEVER modifies the backend)
+   → If provided: the `ang` factory can run `/validate-contracts` and `/sync-contracts` against the backend code (read-only, NEVER modifies the backend)
    → If not provided: work proceeds with the OpenAPI spec only if it exists
 
 #### Option B (without backend):
@@ -461,7 +461,7 @@ The orchestrator **NEVER** executes subfactory skills directly nor loads their `
 
 ### How to delegate
 
-#### Backend Mode → Task to Factoria-Net
+#### Backend Mode → Task to factory `net`
 ```
 Use the Task tool with:
   - description: brief task description
@@ -474,7 +474,7 @@ Use the Task tool with:
 ```
 The subagent will operate on the current directory where the user ran Factoria. The orchestrator must indicate in the prompt to load the factory context via `factoria:loading-factory-context` for factory `net` to obtain the backend factory's rules and conventions.
 
-#### Frontend Mode → Task to Factoria-Ang
+#### Frontend Mode → Task to factory `ang`
 ```
 Use the Task tool with:
   - description: brief task description
@@ -488,7 +488,7 @@ The subagent will operate on the current directory where the user ran Factoria. 
 
 If the user provided a path to the backend project, the Angular factory can read it to validate contracts, but **will NEVER modify files in the backend**.
 
-#### BFF Mode → Task to Factoria-Nest
+#### BFF Mode → Task to factory `nest`
 ```
 Use the Task tool with:
   - description: brief task description
@@ -523,22 +523,22 @@ In Full Stack, backend, frontend, and BFF live in **different folders/repos**. T
 1. Detect what type of project is in the current directory (.NET, Angular, or NestJS)
 2. The user provided the absolute path(s) of the complementary project(s)
 
-3. Launch Task for Factoria-Net
+3. Launch Task for factory `net`
    → working_directory: {path of the .NET project} (could be the current dir or the provided path)
    → Pass: requirement + path to OpenAPI
-   → Indicate to load context from ./Factoria-Net/CLAUDE.md
+   → Indicate to load factory context via `factoria:loading-factory-context` for factory `net`
    → Wait for result
 
-4. Launch Task for Factoria-Ang
+4. Launch Task for factory `ang`
    → working_directory: {path of the Angular project} (could be the current dir or the provided path)
    → Pass: requirement + path to OpenAPI
-   → Indicate to load context from ./Factoria-Ang/CLAUDE.md
+   → Indicate to load factory context via `factoria:loading-factory-context` for factory `ang`
    → Wait for result
 
-5. (If BFF is involved) Launch Task for Factoria-Nest
+5. (If BFF is involved) Launch Task for factory `nest`
    → working_directory: {path of the NestJS BFF project} (could be the current dir or the provided path)
    → Pass: requirement + path to OpenAPI + backend microservice URLs
-   → Indicate to load context from ./Factoria-Nest/CLAUDE.md
+   → Indicate to load the factory context via `factoria:loading-factory-context` for factory `nest`
    → Wait for result
 
 6. The orchestrator receives results from all Tasks
@@ -551,8 +551,8 @@ In Full Stack, backend, frontend, and BFF live in **different folders/repos**. T
 User runs Factoria from: D:/projects/my-backend/ (contains .sln)
 Provides frontend path: D:/projects/my-frontend/ (contains angular.json)
 
-→ Task Factoria-Net: working_directory = D:/projects/my-backend/
-→ Task Factoria-Ang: working_directory = D:/projects/my-frontend/
+→ Task factory `net`: working_directory = D:/projects/my-backend/
+→ Task factory `ang`: working_directory = D:/projects/my-frontend/
 ```
 
 **Note on parallelism**: Backend and frontend Tasks CAN be launched in parallel when they are independent (e.g., both generate code from an already approved OpenAPI). They must be sequential when one depends on the other (e.g., frontend needs endpoints that backend has not yet created).
@@ -562,7 +562,7 @@ Provides frontend path: D:/projects/my-frontend/ (contains angular.json)
 The prompt sent to each Task must contain **all the necessary context** for the factory to work autonomously:
 
 1. **Working directory** — "Your working directory is {absolute project path}. Scan and modify files here."
-2. **Factory context** — "Load the rules and conventions from ./Factoria-Net/CLAUDE.md" or "./Factoria-Ang/CLAUDE.md" as applicable
+2. **Factory context** — "Invoke `factoria:loading-factory-context` for factory `<key>`" — replace `<key>` with the actual factory (net, ang, nest, pyt, etc.)
 3. **User requirement** — what is to be achieved (verbatim, without summarizing)
 4. **Path to OpenAPI** — if applicable: `The OpenAPI contract is at: {path}/.cloud/contracts/openapi.yaml`
 5. **Complementary project path** — if Full Stack: "The complementary {backend/frontend} project is at: {absolute path}"
@@ -585,49 +585,47 @@ The prompt sent to each Task must contain **all the necessary context** for the 
 
 ## Decision Tree
 
+Factory keys: `net` | `ang` | `nest` | `pyt` | `pytml` | `dataeng` | `kot` | `swf` | `wps`
+
 ```
 User request
 │
-├── QUESTION 1: Mode? (backend / frontend / bff / fullstack)
-│   ├── If Full Stack → Detect current dir type → Ask for absolute path(s) of the other project(s)
-│   ├── If Frontend (Angular) → factory = "ang". Does it connect to an existing backend? → YES: base URL + (optional) path to backend code
-
-│   ├── If BFF → Does it connect to backend microservices? → YES: base URLs + (optional) OpenAPI specs
-│   └── If Backend/BFF/Full Stack → Analyze requirement → Third-party integrations? → Request doc/OpenAPI
-│                                                        → Database? → Request connection string
+├── Factory detection (from using-factoria session-start protocol)
+│   ├── net  → Backend .NET. Third-party integrations? → Request doc/OpenAPI. DB? → Request connection string.
+│   ├── ang  → Frontend Angular. Connects to existing backend? → YES: base URL + (optional) backend path.
+│   ├── nest → BFF NestJS. Backend microservices? → YES: base URLs + (optional) OpenAPI specs.
+│   ├── pyt  → Backend Python/FastAPI. Same as net.
+│   ├── pytml → MLOps. Ask for DVC/MLflow config and dataset storage.
+│   ├── dataeng → Databricks. Ask for workspace, catalog, storage config.
+│   ├── kot  → Android/Kotlin. Single-repo, no OpenAPI gate.
+│   ├── swf  → iOS/Swift. Single-repo, no OpenAPI gate.
+│   ├── wps  → WordPress. Single-repo, no OpenAPI gate.
+│   └── net+ang → Full Stack → Ask for absolute path of complementary project.
 │
-├── "Create new project" → /orchestrate
+├── "Create new project"
 │   ├── Existing template or blank?
-│   ├── Do you have an OpenAPI? (paste / file / URL / create)
-│   ├── Backend → Task(current dir, Factoria-Net, /new-project)
-│   ├── Frontend → Task(current dir, Factoria-Ang, /new-project)
-│   ├── BFF → Task(current dir, Factoria-Nest, /new-project)
-│   └── Full Stack → Task(.NET dir, Factoria-Net) + Task(Angular dir, Factoria-Ang) + Task(NestJS dir, Factoria-Nest) → /sync-contracts → /validate-integration
+│   ├── net/ang/nest/pyt → Do you have an OpenAPI? (paste / file / URL / create)
+│   ├── Single factory → Task(current dir, <factory>:loading-factory-context, /new-project)
+│   └── Full Stack → Task(net dir) + Task(ang dir) ± Task(nest dir) → /sync-contracts → /validate-integration
 │
-├── "Add feature" → direct (without asking for OpenAPI)
-│   ├── Backend → Task(current dir, Factoria-Net, /add-feature)
-│   ├── Frontend → Task(current dir, Factoria-Ang, /add-feature)
-│   ├── BFF → Task(current dir, Factoria-Nest, /add-feature)
-│   └── Full Stack → Task(.NET dir, Net) + Task(Angular dir, Ang) + Task(NestJS dir, Nest) → /sync-contracts → /validate-integration
+├── "Add feature"
+│   ├── Single factory → Task(current dir, <factory>:loading-factory-context, /add-feature)
+│   └── Full Stack → Task(net dir) + Task(ang dir) ± Task(nest dir) → /sync-contracts → /validate-integration
 │
-├── "Migrate project" → direct (OpenAPI is extracted from legacy)
-│   ├── Backend → Task(current dir, Factoria-Net, /migration-start)
-│   ├── Frontend → Task(current dir, Factoria-Ang, /migration-start)
-│   ├── BFF → Task(current dir, Factoria-Nest, /migration-start)
-│   └── Full Stack → Task(.NET dir, Net) + Task(Angular dir, Ang) + Task(NestJS dir, Nest) → /sync-contracts → /validate-integration
+├── "Migrate project"
+│   ├── Single factory → Task(current dir, <factory>:loading-factory-context, /migration-start)
+│   └── Full Stack → Task(net dir) + Task(ang dir) ± Task(nest dir) → /sync-contracts → /validate-integration
 │
-├── "Quick task / bug fix"
-│   ├── Backend → Task(current dir, Factoria-Net, /sprint)
-│   ├── Frontend → Task(current dir, Factoria-Ang, /sprint)
-│   ├── BFF → Task(current dir, Factoria-Nest, /sprint)
-│   └── Full Stack → Task(.NET dir, Net) + Task(Angular dir, Ang) + Task(NestJS dir, Nest)
+├── "Sprint / bug fix"
+│   ├── Single factory → Task(current dir, <factory>:loading-factory-context, /sprint)
+│   └── Full Stack → Task(net dir) + Task(ang dir) ± Task(nest dir)
 │
-├── "Generate OpenAPI" → /openapi-generator (orchestrator's own skill)
-├── "Verify integration" → /validate-integration (orchestrator's own skill)
-├── "Synchronize contracts" → /sync-contracts (orchestrator's own skill)
-├── "Project status" → /dashboard (orchestrator's own skill)
+├── "Generate OpenAPI" → /openapi-generator (orchestrator skill — net/ang/nest/pyt only)
+├── "Verify integration" → /validate-integration (orchestrator skill)
+├── "Synchronize contracts" → /sync-contracts (orchestrator skill)
+├── "Project status" → /dashboard (orchestrator skill)
 │
-└── Other → determine mode → Task to corresponding factory(ies)
+└── Other → match task type → Task to corresponding factory(ies)
 ```
 
 ## Automatic Chain
@@ -658,8 +656,8 @@ Any Full Stack task
   → Orchestrator: Detect current directory type
   → Orchestrator: Ask for absolute path of complementary project
   → Orchestrator: (if new project) OpenAPI + template/blank
-  → Orchestrator: Task(.NET dir, Factoria-Net) → Backend: code → tests → docs
-  → Orchestrator: Task(Angular dir, Factoria-Ang) → Frontend: code → tests → docs
+  → Orchestrator: Task(.NET dir, factory `net`) → Backend: code → tests → docs
+  → Orchestrator: Task(Angular dir, factory `ang`) → Frontend: code → tests → docs
   → Orchestrator: Receives results from both Tasks
   → Orchestrator: /sync-contracts (validate alignment with OpenAPI)
   → Orchestrator: /validate-integration (verify backend↔frontend communication)
