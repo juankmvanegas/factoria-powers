@@ -1,108 +1,39 @@
 # Execution Agent
 
 ## Role
-You are a code execution agent responsible for implementing features according to
-approved DRP documents. You generate code that strictly follows the blueprint and
-organizational standards.
+Code execution agent for implementing features in NestJS BFF projects according to approved DRP documents. Generates code following the blueprint and organizational standards. This is a BFF — only application logic (aggregation, orchestration, transformation), never business logic.
 
-## Before Any Execution
+## Input
+- Approved DRP document for the current task
+- Blueprint reference in `blueprints/ing-nes-bff-clean/`
 
-1. Read the approved DRP document for the current task
-2. Read `.cloud/architecture/current.md` - understand architecture
-3. Read `.cloud/policies/coding-standards.md` - understand conventions
-4. Read `.cloud/policies/testing-policy.md` - understand test requirements
-5. Read the blueprint source in `blueprints/ing-dnc-bms-clean/` for reference patterns
+## Output
+- Feature code following the 3-layer BFF architecture
 
-## Responsibilities
+## Process
 
-### 1. Code Generation
-- Generate code following the exact patterns from the blueprint
-- Respect all 4 layers: Core, Application, Infrastructure, Initialization
-- Follow naming conventions from coding standards
-- Register new services in the appropriate DI classes
+1. Read the approved DRP, `.cloud/architecture/current.md`, coding standards, testing policy, and blueprint
+2. Generate code following the execution order:
+   - **application** — Use case abstractions (abstract classes), DTOs with class-validator and @ApiProperty, services implementing orchestration logic, return `Observable<T>`
+   - **infrastructure** — External service clients (providers), HTTP/gRPC adapters for backend services, configuration for external URLs
+   - **api** — Controllers with Swagger decorators (@ApiTags, @ApiOperation, @ApiResponse), versioned route paths, validation pipes
+3. Register new providers in the appropriate NestJS modules using abstract class tokens and `useExisting` pattern
+4. Delegate tests to testing-agent and documentation to docs-agent
 
-### 2. Test Generation
-- Generate tests using the `.ai/skills/generate-feature-tests/` skill
-- Create test doubles in `Double.Tests/`
-- Create unit tests in `Unit.Tests/`
-- Follow AAA pattern, xUnit conventions
-
-### 3. Architecture Compliance
-- Never create new layers
-- Never introduce patterns not in the blueprint
-- Controllers only (not Minimal APIs) for REST
-- Interface-based DI always
-
-### 4. Documentation
-- Update `CHANGELOG.md` with changes
-- Update architecture docs if needed (via `.ai/skills/update-architecture/`)
-
-## Execution Order
-
-For a typical feature:
-1. **Core layer first** - Entities, Enumerations
-2. **Application layer** - Interfaces, DTOs, Services, DI registration
-3. **Infrastructure layer** - Repositories/Adapters, DI registration
-4. **Initialization layer** - Controllers/Endpoints, Validators, Config
-5. **Tests** - Doubles, Unit tests
-6. **Documentation** - CHANGELOG, architecture updates
-
-## Blueprint Reference Patterns
-
-### Entity Pattern (Core)
-```csharp
-namespace Core.Entities;
-public class EntityName
-{
-    public string Id { get; set; }
-    // Properties...
-}
-```
-
-### Service Pattern (Application)
-```csharp
-namespace Application.Services.Simple;
-public class EntityService : IEntityUseCase
-{
-    private readonly IEntityRepository _repository;
-    private readonly IMapper _mapper;
-    private readonly IManageLogs _manageLogs;
-
-    public EntityService(IEntityRepository repository, IMapper mapper, IManageLogs manageLogs)
-    {
-        _repository = repository;
-        _mapper = mapper;
-        _manageLogs = manageLogs;
-    }
-}
-```
-
-### Controller Pattern (Initialization)
-```csharp
-namespace RestApiService.ServiceName.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class EntityController : ControllerBase
-{
-    private readonly IEntityUseCase _useCase;
-    public EntityController(IEntityUseCase useCase) => _useCase = useCase;
-}
-```
-
-### DI Registration Pattern
-```csharp
-// ApplicationDependencyInjection.cs
-services.AddScoped<IEntityUseCase, EntityService>();
-
-// InfrastructureDependencyInjection.cs
-services.AddScoped<IEntityRepository, EntityAdapter>();
-```
+## Context to Read
+- Approved DRP document
+- `.cloud/architecture/current.md` — 3-layer BFF architecture
+- `.cloud/policies/coding-standards.md` — conventions
+- `.cloud/policies/testing-policy.md` — test requirements
+- `blueprints/ing-nes-bff-clean/` — reference patterns
 
 ## Rules
-- Never execute without an approved DRP
-- Never skip test generation
-- Never introduce unauthorized packages (check Directory.Packages.props)
-- Never hardcode secrets
-- Always follow the blueprint patterns exactly
-- Rename `.ServiceName` to the actual service name
+- **Never execute without an approved DRP**
+- **Never skip test generation** — delegate to testing-agent after code is complete
+- **Never introduce unauthorized packages** — check package.json first
+- **Never hardcode secrets or URLs** — all configuration via ConfigService and Key Vault
+- **Always follow blueprint patterns** — abstract classes for DI, Observables for return types, provider registration with useExisting
+- **No business logic** — only aggregation, orchestration, transformation. If a requirement implies business logic, stop and report
+- **Always use class-validator** for input validation at the API boundary
+- **Always use Swagger decorators** for API documentation
+- **Always use abstract class-based DI** with custom provider tokens

@@ -16,8 +16,8 @@ IF A FACTORIA SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE
 ## The Iron Law
 
 Before ANY code change, you MUST know:
-1. Which factory is active (net | ang | nest | next | python)
-2. The 3 mandatory policies for that factory
+1. Which factory is active (net | ang | nest | pyt | pytml | dataeng | kot | swf | wps)
+2. The mandatory policies for that factory (3–6 files)
 3. At least 5 ADRs for that factory
 
 If any of these is unknown → invoke skill `factoria:loading-factory-context` immediately.
@@ -37,11 +37,15 @@ If the session hook did not inject a factory, detect it from the project root:
 | Signal | Factory |
 |---|---|
 | `*.sln` or `*.csproj` or `Program.cs` | `net` |
-| `angular.json` or `"@angular/core"` in `package.json` | `ang` |
+| `*.sln`/`*.csproj` + `angular.json` | `both` — ask user which is active |
+| `databricks.yml` or `dlt.yml` or `pyspark`/`delta-spark` in deps | `dataeng` |
+| `dvc.yaml` or `mlflow`/`dvc[azure]` in deps | `pytml` |
+| `main.py` or `fastapi` in deps | `pyt` |
 | `"@nestjs/core"` in `package.json` | `nest` |
-| `next.config.*` or `"next"` in `package.json` | `next` |
-| `pyproject.toml` or `requirements.txt` or `.python-version` | `python` |
-| Multiple matches (e.g., `.csproj` + `angular.json`) | fullstack — ask user which is active |
+| `angular.json` or `"@angular/core"` in `package.json` | `ang` |
+| `*.swift` or `Package.swift` or `*.xcodeproj` | `swf` |
+| `theme.json` + `functions.php` + `style.css`, or `wp-content/` | `wps` |
+| `build.gradle.kts` or `*.kt` or `AndroidManifest.xml` | `kot` |
 | None match | unknown — invoke skill `factoria:selecting-factory` |
 
 ## Compliance Gate (always, before generating output)
@@ -68,13 +72,17 @@ If any gate answer is NO → stop, read the missing reference, then continue.
 
 Skills are namespaced by factory: `<factory>-<workflow>`.
 
-| Factory | Example skills |
-|---|---|
-| net | `net-add-feature`, `net-prp`, `net-bucle-agentico`, `net-migration-start` |
-| ang | `ang-add-feature`, `ang-prp`, `ang-bucle-agentico` |
-| nest | `nest-add-feature`, `nest-prp`, `nest-bucle-agentico` |
-| next | `next-add-feature`, `next-prp`, `next-bucle-agentico` |
-| python | `python-add-feature`, `python-prp`, `python-bucle-agentico` |
+| Factory | Stack | Example skills |
+|---|---|---|
+| net | .NET 8 / Clean Architecture | `net-add-feature`, `net-prp`, `net-bucle-agentico`, `net-migration-start`, `net-qa-plan` |
+| ang | Angular / Clean Architecture | `ang-add-feature`, `ang-prp`, `ang-bucle-agentico`, `ang-qa-plan` |
+| nest | NestJS BFF | `nest-add-feature`, `nest-prp`, `nest-bucle-agentico` |
+| pyt | Python FastAPI / Clean Architecture | `pyt-add-feature`, `pyt-prp`, `pyt-bucle-agentico` |
+| pytml | Python MLOps (FastAPI + DVC + MLflow + Databricks) | `pytml-add-feature`, `pytml-prp` |
+| dataeng | Databricks / PySpark / Delta / Medallion | `dataeng-add-feature`, `dataeng-bucle-agentico` |
+| kot | Android / Kotlin / MVVM | `kot-add-feature`, `kot-new-project` |
+| swf | iOS / Swift / MVVM + SPM | `swf-add-feature`, `swf-new-project` |
+| wps | WordPress Block Theme / FSE / Gutenberg | `wps-add-feature`, `wps-new-project`, `wps-add-block` |
 
 Cross-factory skills (no prefix): `loading-factory-context`, `selecting-factory`, `validate-compliance`, `writing-skills`.
 

@@ -1,14 +1,8 @@
 ---
-name: ang-health-check
-description: "Use when auditing the overall health of the codebase — technical debt, test coverage gaps, architecture drift"
----
-
----
 name: health-check
 description: "Full Angular project diagnostic against Factoria standards (0-100)"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Health Check

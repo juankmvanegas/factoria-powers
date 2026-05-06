@@ -1,9 +1,4 @@
 ---
-name: nest-new-project
-description: "Use when initializing a brand-new project from scratch following the factory template"
----
-
----
 name: new-project
 description: "Create new NestJS BFF project from blueprint or from scratch"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash

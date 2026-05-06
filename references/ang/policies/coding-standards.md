@@ -2,13 +2,13 @@
 
 ## Architecture
 
-### 3-Layer Clean Architecture
+### 3-Layer Clean Architecture + Atomic Design
 
 | Layer | Number | Depends on | Content |
 |-------|--------|------------|---------|
 | Application | 3 | NOTHING | Use Cases (abstract), Adapters (abstract), DTOs, Events, Services (impl), Helpers |
 | Infrastructure | 2 | Only Application | HTTP adapters, MSAL, Storage, Guards, Interceptors, Error Handlers |
-| Presentation | 1 | Only Application abstractions | Views, Pages, Components, Routing, Modules, Styles |
+| Presentation | 1 | Only Application abstractions | Views, Pages, Atomic Design Components, Routing, Modules, Styles |
 | Libs | - | NOTHING | Config, AppSettings, MF manifest |
 
 ### Dependency Rules
@@ -16,7 +16,16 @@
 - Application has ZERO concrete dependencies
 - Infrastructure ONLY implements Application abstractions
 - Presentation ONLY consumes abstract Use Cases — NEVER concrete services or Infrastructure adapters
+- Presentation reusable UI follows Atomic Design: atoms → molecules → organisms → templates/pages
+- Atomic Design is a Presentation organization rule; it does not change or weaken Clean Architecture dependencies
 - Libs is independent — configuration only
+
+### Angular Version Strategy
+
+- New Angular projects and intentional upgrades use the latest stable supported Angular version by default
+- Existing Angular projects may remain on another supported major version when the constraint is documented in an ADR
+- Unsupported/EOL Angular versions require an upgrade plan before adding new feature scope
+- TypeScript, `@angular-eslint`, Angular CLI, Router, HttpClient, testing utilities, and build plugins must be aligned with the selected Angular major
 
 ### DI Registration
 
@@ -79,6 +88,7 @@ imports: [ApplicationModule, InfraestructureModule, RouterModule.forRoot(routes)
 - Always kebab-case: `notes-view`, `api-bff`, `local-storage`
 - Views by domain: `{entity}-view/`
 - No `.component` suffix in component file names
+- Reusable UI components follow Atomic Design folders under `presentation/common/static-components/`: `atoms/`, `molecules/`, `organisms/`, `templates/`
 
 ### Classes
 
@@ -176,6 +186,15 @@ Partial files: `_` prefix (e.g., `_colors.scss`).
 ### Fixed
 ### Removed
 ```
+
+## Sonar Standards
+
+- Cyclomatic complexity must stay **below 10** per function or method
+- Cognitive complexity must stay **below 15** per function or method
+- Avoid nesting deeper than **3 levels**
+- Do not leave dead code, unused members, duplicated branches, or unreachable paths
+- Do not leave commented-out code
+- Avoid source-code comments for routine logic; prefer extraction, naming, and composition
 
 ## Path Aliases
 

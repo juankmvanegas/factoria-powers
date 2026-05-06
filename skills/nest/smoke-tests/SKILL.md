@@ -1,9 +1,4 @@
 ---
-name: nest-smoke-tests
-description: "Use when verifying that critical paths of the application still work after a deployment or significant change"
----
-
----
 name: smoke-tests
 description: "Post-migration smoke tests — verify that the BFF service works"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash

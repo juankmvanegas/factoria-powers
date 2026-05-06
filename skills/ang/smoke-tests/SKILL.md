@@ -1,9 +1,4 @@
 ---
-name: ang-smoke-tests
-description: "Use when verifying that critical paths of the application still work after a deployment or significant change"
----
-
----
 name: smoke-tests
 description: "Post-migration Angular smoke tests — verify the app works"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash

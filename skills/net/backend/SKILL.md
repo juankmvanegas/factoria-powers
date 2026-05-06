@@ -1,9 +1,4 @@
 ---
-name: net-backend
-description: "Use when backend-specific implementation guidance is needed for this factory's backend stack"
----
-
----
 name: backend
 description: ".NET backend specialist — automatically applies enterprise standards"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
@@ -81,6 +76,23 @@ Each layer registers its own dependencies in its designated class:
 - **Initialization** → `ServicesConfiguration` — composes the above and adds middleware, authentication, Swagger, etc.
 
 Do not register dependencies from one layer in another layer's class.
+
+## Initialization Startup Contract
+
+For any `Program.cs` change, preserve the mandatory startup order:
+
+1. Builder creation.
+2. Local non-secret configuration.
+3. Dynamic configuration providers when required.
+4. `ResolveSecrets`.
+5. Application DI.
+6. Infrastructure DI with resolved configuration.
+7. Initializer-specific DI in `ServicesConfiguration`.
+8. Build.
+9. Middleware/endpoints/subscriptions/jobs.
+10. `await app.RunAsync()` or `await host.RunAsync()`.
+
+`ResolveSecrets` must run before Infrastructure DI or any provider reads connection strings, Service Bus settings, certificates, API keys, or credentials. Keep `Program.cs` thin: no business logic, no repository implementation details, no hardcoded secrets, no Minimal APIs for REST services, no synchronous `Run()`, and no global `try/catch` wrapping startup/run.
 
 ## Naming Conventions
 

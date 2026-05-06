@@ -1,14 +1,8 @@
 ---
-name: nest-health-check
-description: "Use when auditing the overall health of the codebase — technical debt, test coverage gaps, architecture drift"
----
-
----
 name: health-check
 description: "Full project diagnostic against Factoria NestJS BFF standards"
 allowed-tools: Read, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Health Check

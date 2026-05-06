@@ -1,14 +1,8 @@
 ---
-name: net-codebase-analyst
-description: "Use when deep analysis of the existing codebase is needed — understanding structure, patterns, or impact of changes"
----
-
----
 name: codebase-analyst
 description: "Analyze existing .NET codebase — patterns, architecture, dependencies, technical debt"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Codebase Analyst

@@ -1,9 +1,4 @@
 ---
-name: nest-backend
-description: "Use when backend-specific implementation guidance is needed for this factory's backend stack"
----
-
----
 name: backend
 description: "NestJS BFF specialist — auto-activated on NestJS code changes"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash

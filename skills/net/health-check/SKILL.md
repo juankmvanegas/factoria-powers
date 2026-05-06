@@ -1,14 +1,8 @@
 ---
-name: net-health-check
-description: "Use when auditing the overall health of the codebase — technical debt, test coverage gaps, architecture drift"
----
-
----
 name: health-check
 description: "Full project diagnostic against Factoria standards (0-100)"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Health Check
@@ -62,6 +56,14 @@ The highest-weight category — security is critical:
 | Azure Key Vault configured | 4 | Azure Key Vault reference exists in Program.cs or configuration |
 | No system details in errors | 4 | Exception middleware does not expose stack traces or internal details to clients |
 | Input validation | 4 | All controllers with POST/PUT endpoints have input validation |
+
+For the Azure Key Vault check, verify all Initialization projects:
+- `Program.cs` contains a Key Vault resolution call (`ResolveSecrets` or the approved project equivalent)
+- Secret resolution happens before Infrastructure DI, database/provider registration, Service Bus registration, or hosted services that depend on secrets
+- Startup uses asynchronous host execution (`await app.RunAsync()` or `await host.RunAsync()`)
+- Startup is not wrapped in a global `try/catch` in `Program.cs`
+- No versioned `appsettings*.json` contains real connection strings, passwords, API keys, or certificates
+- Non-local environments fail fast when Key Vault resolution is missing or unreachable
 
 ### Phase 4: Testing Verification (20 points)
 

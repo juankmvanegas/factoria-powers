@@ -7,7 +7,7 @@ description: Use when the factory is known but its policies, ADRs, and technolog
 
 ## What to Load
 
-For the active factory (replace `<factory>` with `net`, `ang`, `nest`, `next`, or `python`):
+For the active factory (replace `<factory>` with `net`, `ang`, `nest`, `pyt`, `pytml`, `dataeng`, `kot`, `swf`, or `wps`):
 
 ### 1. Factory Identity (required)
 ```
@@ -15,14 +15,14 @@ Read: references/<factory>/CLAUDE.md
 ```
 This establishes the technology stack, golden rules, and architecture overview.
 
-### 2. Mandatory Policies (all 3 required)
+### 2. Mandatory Policies (read ALL files in the policies folder — count varies by factory)
 ```
-Read: references/<factory>/policies/security-policy.md
-Read: references/<factory>/policies/testing-policy.md
-Read: references/<factory>/policies/coding-standards.md
+Read all: references/<factory>/policies/*.md
 ```
+Net/Ang/Pyt typically have 6 policies (security, testing, coding-standards + qa, performance, security-testing).
+DataEng has 6 specialized policies. Kot/Swf/Wps have 3–4. Read them all.
 
-### 3. Core ADRs (minimum 5, read all 14 when possible)
+### 3. Core ADRs (minimum 5; read all when possible)
 ```
 Read: references/<factory>/adrs/ADR-001-*.md
 Read: references/<factory>/adrs/ADR-002-*.md
@@ -31,7 +31,7 @@ Read: references/<factory>/adrs/ADR-004-*.md
 Read: references/<factory>/adrs/ADR-005-*.md
 ```
 
-For tasks touching infrastructure, security, testing, or CI/CD: read all 14 ADRs.
+For tasks touching infrastructure, security, testing, or CI/CD: read all ADRs (count varies 10–15 by factory).
 
 ## After Loading
 

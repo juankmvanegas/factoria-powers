@@ -1,14 +1,8 @@
 ---
-name: ang-review-pr
-description: "Use when reviewing a pull request — checks code quality, policy compliance, ADR adherence, and test coverage"
----
-
----
 name: review-pr
 description: "PR review against all Factoria Angular policies"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Review PR

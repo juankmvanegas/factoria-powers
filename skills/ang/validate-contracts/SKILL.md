@@ -1,14 +1,8 @@
 ---
-name: ang-validate-contracts
-description: "Use when checking that API contracts between frontend and backend (or between microservices) are still honored"
----
-
----
 name: validate-contracts
 description: "Validate route and component compatibility legacy vs new Angular"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Validate Contracts

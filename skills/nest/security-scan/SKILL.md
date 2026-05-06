@@ -1,14 +1,8 @@
 ---
-name: nest-security-scan
-description: "Use when code has been written or modified and security policy compliance needs to be verified"
----
-
----
 name: security-scan
 description: "Auto security validation on every code change — validates against security policy"
 allowed-tools: Read, Grep, Glob, Bash
 user-invocable: false
-context: fork
 ---
 
 # Skill: Security Scan

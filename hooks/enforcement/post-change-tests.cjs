@@ -39,6 +39,9 @@ process.stdin.on("end", () => {
       reminders.push(
         "Run Architecture Tests: dotnet test on Tests/Architecture.Tests/"
       );
+      reminders.push(
+        "Update QA traceability if behavior changed: /qa-scenarios -> /qa-test-cases -> /qa-report"
+      );
 
       if (pathLower.includes("/application/") && pathLower.includes("/services/")) {
         reminders.push(
@@ -50,11 +53,17 @@ process.stdin.on("end", () => {
         reminders.push(
           "Run Integration Tests if available in Tests/Integration.Tests/"
         );
+        reminders.push(
+          "Consider /perf-test if the change affects throughput, queries, or heavy integrations"
+        );
       }
 
       if (pathLower.includes("/controllers/") || pathLower.includes("/validators/")) {
         reminders.push(
           "Verify FluentValidation rules match the controller's expected input"
+        );
+        reminders.push(
+          "Consider /dast-scan and /sast-scan if public API or auth behavior changed"
         );
       }
 
@@ -72,6 +81,10 @@ process.stdin.on("end", () => {
     // Angular code changes
     // ════════════════════════════════════════════
     if (filePath.endsWith(".ts")) {
+      reminders.push(
+        "Update QA traceability if behavior changed: /qa-scenarios -> /qa-test-cases -> /qa-report"
+      );
+
       if (pathLower.includes("/application/") && pathLower.includes("/services/")) {
         reminders.push(
           "Run tests: ng test --watch=false for the affected service spec"
@@ -90,6 +103,9 @@ process.stdin.on("end", () => {
       ) {
         reminders.push(
           "Consider visual validation with /playwright-cli if UI changed"
+        );
+        reminders.push(
+          "Consider /perf-test if the route is rendering-heavy or business-critical"
         );
       }
 
@@ -119,6 +135,9 @@ process.stdin.on("end", () => {
       reminders.push(
         "Package change: run npm install && ng build to verify compatibility"
       );
+      reminders.push(
+        "Run /sast-scan if package changes introduce security-sensitive dependencies"
+      );
     }
 
     if (filePath.endsWith("angular.json") || filePath.endsWith("tsconfig.json")) {
@@ -134,6 +153,9 @@ process.stdin.on("end", () => {
       // Always remind about CHANGELOG
       reminders.push(
         "Update CHANGELOG.md if this change adds, modifies, or fixes a feature"
+      );
+      reminders.push(
+        "If this is a release candidate or critical flow, consolidate with /qa-release-gate"
       );
 
       const output =

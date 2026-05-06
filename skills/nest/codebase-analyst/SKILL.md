@@ -1,14 +1,8 @@
 ---
-name: nest-codebase-analyst
-description: "Use when deep analysis of the existing codebase is needed — understanding structure, patterns, or impact of changes"
----
-
----
 name: codebase-analyst
 description: "Analyze existing NestJS BFF code for architecture compliance and patterns"
 allowed-tools: Read, Grep, Glob, Bash
 user-invocable: true
-context: fork
 ---
 
 # Skill: Codebase Analyst

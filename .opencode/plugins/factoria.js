@@ -46,45 +46,74 @@ const normalizePath = (p, homeDir) => {
   return path.resolve(normalized);
 };
 
-// Factory auto-detection from project directory
+const fileContains = (filePath, pattern) => {
+  try { return fs.readFileSync(filePath, 'utf8').toLowerCase().includes(pattern); } catch { return false; }
+};
+
+// Factory auto-detection (ported from sc-nes-factoria/bin/factoria-init.mjs:104-170)
 const detectFactory = (dir) => {
   try {
     const files = fs.readdirSync(dir);
+    const join = (...p) => path.join(dir, ...p);
 
     // .NET: .sln / .csproj / Program.cs
     const hasNet = files.some(f => f.endsWith('.sln') || f.endsWith('.csproj')) ||
-                   fs.existsSync(path.join(dir, 'Program.cs'));
+                   fs.existsSync(join('Program.cs'));
 
-    // Angular: angular.json or @angular/core in package.json
-    const hasAngularJson = fs.existsSync(path.join(dir, 'angular.json'));
-    let hasAngularDep = false, hasNestDep = false, hasNextDep = false;
-    const pkgPath = path.join(dir, 'package.json');
+    // Angular / NestJS deps from package.json
+    let hasAngularDep = false, hasNestDep = false;
+    const pkgPath = join('package.json');
     if (fs.existsSync(pkgPath)) {
       try {
         const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
         const deps = { ...pkg.dependencies, ...pkg.devDependencies };
         hasAngularDep = '@angular/core' in deps;
         hasNestDep = '@nestjs/core' in deps;
-        hasNextDep = 'next' in deps;
       } catch { /* ignore */ }
     }
-    const hasAngular = hasAngularJson || hasAngularDep;
+    const hasAngular = fs.existsSync(join('angular.json')) || hasAngularDep;
 
-    // Next.js: next.config.* or next dep
-    const hasNextConfig = files.some(f => f.startsWith('next.config.'));
+    // Databricks / Data Engineering
+    const isDataEng = fs.existsSync(join('databricks.yml')) ||
+                      fs.existsSync(join('dlt.yml')) ||
+                      fileContains(join('pyproject.toml'), 'pyspark') ||
+                      fileContains(join('pyproject.toml'), 'delta-spark') ||
+                      fileContains(join('requirements.txt'), 'pyspark') ||
+                      fileContains(join('requirements.txt'), 'delta-spark');
 
-    // Python: pyproject.toml / requirements.txt / .python-version
-    const hasPython = fs.existsSync(path.join(dir, 'pyproject.toml')) ||
-                      fs.existsSync(path.join(dir, 'requirements.txt')) ||
-                      fs.existsSync(path.join(dir, '.python-version')) ||
-                      fs.existsSync(path.join(dir, 'main.py'));
+    // Python MLOps: dvc.yaml / mlflow / dvc[azure]
+    const isPytMlops = fs.existsSync(join('dvc.yaml')) ||
+                       fileContains(join('pyproject.toml'), 'mlflow') ||
+                       fileContains(join('pyproject.toml'), 'dvc[azure]');
+
+    // Python FastAPI
+    const isPython = fs.existsSync(join('main.py')) ||
+                     fileContains(join('pyproject.toml'), 'fastapi') ||
+                     fileContains(join('requirements.txt'), 'fastapi') ||
+                     fileContains(join('requirements-dev.txt'), 'fastapi');
+
+    // iOS/Swift
+    const hasSwift = files.some(f => f.endsWith('.swift') || f.endsWith('.xcodeproj') || f.endsWith('.xcworkspace')) ||
+                     fs.existsSync(join('Package.swift'));
+
+    // WordPress
+    const hasWp = (fs.existsSync(join('theme.json')) && fs.existsSync(join('functions.php')) && fs.existsSync(join('style.css'))) ||
+                  fs.existsSync(join('wp-content'));
+
+    // Android/Kotlin
+    const hasKot = fs.existsSync(join('build.gradle.kts')) ||
+                   files.some(f => f.endsWith('.kt'));
 
     if (hasNet && hasAngular) return 'both';
     if (hasNet) return 'net';
-    if (hasAngular) return 'ang';
+    if (isDataEng && !isPytMlops) return 'dataeng';
+    if (isPytMlops) return 'pytml';
+    if (isPython) return 'pyt';
     if (hasNestDep) return 'nest';
-    if (hasNextConfig || hasNextDep) return 'next';
-    if (hasPython) return 'python';
+    if (hasAngular) return 'ang';
+    if (hasSwift) return 'swf';
+    if (hasWp) return 'wps';
+    if (hasKot) return 'kot';
     return 'unknown';
   } catch {
     return 'unknown';
@@ -116,7 +145,7 @@ export const FactoriaPlugin = async ({ client, directory }) => {
     const factory = detectFactory(projectDir);
     let factoryHeader;
     if (factory === 'unknown') {
-      factoryHeader = 'Factory not auto-detected. Invoke skill `factoria:selecting-factory` to identify the active factory.';
+      factoryHeader = 'Factory not auto-detected. Invoke skill `factoria:selecting-factory` to identify the active factory (net | ang | nest | pyt | pytml | dataeng | kot | swf | wps).';
     } else if (factory === 'both') {
       factoryHeader = 'Detected multi-factory project (.NET + Angular). Invoke skill `factoria:selecting-factory` to set the active factory for this session.';
     } else {

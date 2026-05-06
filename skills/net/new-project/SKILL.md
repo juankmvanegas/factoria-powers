@@ -1,9 +1,4 @@
 ---
-name: net-new-project
-description: "Use when initializing a brand-new project from scratch following the factory template"
----
-
----
 name: new-project
 description: "Initialize Factoria in a project — from scratch or on an existing .NET project"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
@@ -124,6 +119,7 @@ Create the 4-layer structure following Factoria standards.
 │       │   ├── Filters/
 │       │   ├── Middleware/
 │       │   ├── Validators/
+│       │   ├── ConfigurationExtensions.cs
 │       │   ├── Program.cs
 │       │   ├── ServicesConfiguration.cs
 │       │   └── RestApiService.{ServiceName}.csproj
@@ -131,16 +127,19 @@ Create the 4-layer structure following Factoria standards.
 │       │   ├── Services/
 │       │   ├── Interceptors/
 │       │   ├── Validators/
+│       │   ├── ConfigurationExtensions.cs
 │       │   ├── Program.cs
 │       │   ├── ServicesConfiguration.cs
 │       │   └── GrpcApiService.{ServiceName}.csproj
 │       ├── MessagingService.{ServiceName}/      ← (if chosen — inside same Initialization/)
 │       │   ├── Subscriptions/
+│       │   ├── ConfigurationExtensions.cs
 │       │   ├── Program.cs
 │       │   ├── ServicesConfiguration.cs
 │       │   └── MessagingService.{ServiceName}.csproj
 │       └── CronJobService.{ServiceName}/        ← (if chosen — inside same Initialization/)
 │           ├── Jobs/
+│           ├── ConfigurationExtensions.cs
 │           ├── Program.cs
 │           ├── ServicesConfiguration.cs
 │           └── CronJobService.{ServiceName}.csproj
@@ -167,6 +166,11 @@ Create the 4-layer structure following Factoria standards.
 ├── Directory.Packages.props
 ├── BUSINESS_LOGIC.md
 ├── CHANGELOG.md
+├── .azuredevops/
+│   ├── azure-pipelines.yaml                  ← REST pipeline (if REST is selected)
+│   ├── azure-pipelines-grpc.yaml             ← gRPC pipeline (if gRPC is selected)
+│   ├── azure-pipelines-messaging.yaml        ← Messaging pipeline (if Messaging is selected)
+│   └── azure-pipelines-cronjob.yaml          ← CronJob pipeline (if CronJob is selected)
 └── .cloud/
     └── architecture/
         └── decisions/
@@ -186,6 +190,49 @@ Create the 4-layer structure following Factoria standards.
 **Directory.Build.props**: .NET 8.0, nullable enable, implicit usings.
 
 **Directory.Packages.props**: Central Package Management with the Golden Path versions defined in CLAUDE.md.
+
+**.azuredevops/**: create one Azure DevOps YAML pipeline per selected initialization type, following ADR-014. Pipelines must run restore, build, Architecture.Tests, Unit.Tests, Integration.Tests when configured, publish, and deploy per environment. Secret variables must be Key Vault references or secure variable-group references only; never write secret values in YAML.
+
+### Phase A4b: Initialization Startup Template
+
+For every selected initialization type, generate `Program.cs`, `ConfigurationExtensions.cs`, and `ServicesConfiguration.cs` using the mandatory startup contract from ADR-004 and ADR-008.
+
+Required `Program.cs` order:
+
+1. Create the builder.
+2. Load non-secret configuration.
+3. Add dynamic providers (`AddMongoProvider`) when applicable.
+4. Call `ResolveSecrets` before DI.
+5. Register Application DI.
+6. Register Infrastructure DI with resolved configuration.
+7. Register initializer-specific services.
+8. Build.
+9. Configure middleware/endpoints/subscriptions/jobs.
+10. Run asynchronously with `await app.RunAsync()` or `await host.RunAsync()`.
+
+REST template baseline:
+
+```csharp
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Host.AddCustomConfiguration();
+builder.Configuration.ResolveSecrets();
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCustomServices(builder.Configuration);
+
+WebApplication app = builder.Build();
+
+app.UseCustomMiddlewares();
+app.MapControllers();
+
+await app.RunAsync();
+```
+
+Messaging and CronJob services may use `Host.CreateApplicationBuilder(args)` or `Host.CreateDefaultBuilder(args)`, but the same order is mandatory.
+
+`Program.cs` MUST NOT include business logic, hardcoded secrets, hardcoded connection strings, provider implementation details, direct registrations that belong to Application or Infrastructure, synchronous `Run()`, or a global `try/catch` wrapping the startup sequence.
 
 ### Phase A5: Initial Architecture Tests
 
@@ -222,6 +269,7 @@ Scan the complete project and map:
 8. **Controllers/Endpoints**: Search in Initialization
 9. **Existing tests**: Search for test projects
 10. **Configuration**: `appsettings.json`, `Program.cs`, DI registration
+11. **Initialization startup**: verify `Program.cs` follows ADR-004/ADR-008 startup order, including `ResolveSecrets` before Infrastructure DI
 
 ### Phase B2: Validation Against Factoria Standards
 
@@ -252,6 +300,15 @@ Specifically verify:
 - [ ] Test structure present
 - [ ] DI registration in each layer
 - [ ] Error handling patterns (BusinessException)
+- [ ] Initialization projects are under `src/Initialization/[Type]Service.[Name]/`
+- [ ] Every initializer has `Program.cs`, `ConfigurationExtensions.cs`, and `ServicesConfiguration.cs`
+- [ ] `Program.cs` calls `ResolveSecrets` before infrastructure/provider registrations
+- [ ] `Program.cs` delegates Application and Infrastructure registrations to their layer DI extensions
+- [ ] `Program.cs` runs the initializer asynchronously with `await app.RunAsync()` or `await host.RunAsync()`
+- [ ] `Program.cs` does not wrap builder/DI/build/run in a global `try/catch`
+- [ ] No secrets, connection strings, or provider credentials in versioned `appsettings*.json`
+- [ ] `.azuredevops/` exists with one pipeline YAML per initializer type present in `src/Initialization/`
+- [ ] Pipeline YAML uses Key Vault/secure variable-group references for secrets and runs architecture/unit/integration gates
 
 ### Phase B3: BUSINESS_LOGIC.md Generation
 

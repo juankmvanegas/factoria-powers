@@ -18,7 +18,8 @@ Use Azure DevOps Pipelines with YAML definitions per service type.
 |---|---|
 | `azure-pipelines.yaml` | REST API service |
 | `azure-pipelines-grpc.yaml` | gRPC service |
-| `azure-pipelines-mesaaging.yaml` | Messaging service |
+| `azure-pipelines-messaging.yaml` | Messaging service |
+| `azure-pipelines-cronjob.yaml` | CronJob service |
 
 ### Pipeline Stages
 1. **Build** - `dotnet restore`, `dotnet build --configuration Release`
@@ -40,3 +41,5 @@ workflow generation for GitHub-hosted repositories using the same patterns.
 - Each service type has its own pipeline
 - Tests are mandatory gates before deployment
 - Secrets injected from Azure Key Vault via pipeline variables
+- New project scaffolds must create `.azuredevops/` with the pipeline definition for every selected initializer
+- Pipeline variables must reference Key Vault or secure variable groups; secret values must never be committed in YAML

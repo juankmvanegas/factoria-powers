@@ -1,14 +1,8 @@
 ---
-name: ang-security-scan
-description: "Use when code has been written or modified and security policy compliance needs to be verified"
----
-
----
 name: security-scan
 description: "Automatic security scan against corporate policies (Angular)"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 user-invocable: false
-context: fork
 ---
 
 # Skill: Security Scan (Angular — Auto-Activated)

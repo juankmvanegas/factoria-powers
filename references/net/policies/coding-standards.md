@@ -101,9 +101,35 @@ public static class ConfigurationExtensions
 // ServicesConfiguration.cs - DI service registration
 public static class ServicesConfiguration
 {
-    public static void AddCustomServices(this IServiceCollection services) { }
+    public static void AddCustomServices(this IServiceCollection services, IConfiguration configuration) { }
 }
 ```
+
+### Program.cs Startup Contract (mandatory)
+`Program.cs` is only the composition root. It orchestrates startup and delegates registration to extension classes.
+
+Required order for every Initialization project:
+
+1. Create `WebApplicationBuilder` or `HostApplicationBuilder`.
+2. Load local non-secret configuration (`appsettings.json`, `appsettings.{Environment}.json`, environment variables).
+3. Add dynamic configuration providers such as `AddMongoProvider` when required.
+4. Call `ResolveSecrets` against the final configuration.
+5. Register `ApplicationDependencyInjection`.
+6. Register `InfrastructureDependencyInjection` with the resolved configuration.
+7. Register initializer-specific services through `ServicesConfiguration`.
+8. Build and configure the middleware/endpoints/subscriptions/jobs.
+9. Run the app/host asynchronously with `await app.RunAsync()` or `await host.RunAsync()`.
+
+`ResolveSecrets` MUST happen before any service registration that reads `ConnectionStrings`, Service Bus settings, certificates, API keys, or provider credentials.
+
+Prohibited in `Program.cs`:
+- Business logic
+- Repository/adapter implementation details
+- Hardcoded URLs, keys, tokens, passwords, or connection strings
+- Direct DI registrations for Application or Infrastructure services when the layer already owns a DI extension
+- Minimal API endpoint definitions in REST initializers
+- Global `try/catch` wrapping builder creation, DI registration, `Build`, or `RunAsync`
+- Synchronous host execution with `app.Run()` or `host.Run()`
 
 ## 5. Error Handling
 - Business errors: `BusinessException` with `BusinessExceptionTypes`
@@ -125,3 +151,13 @@ public static class ServicesConfiguration
 ## 8. CHANGELOG
 - Every release must update `CHANGELOG.md`
 - Follow Keep a Changelog format: Added, Fixed, Changed, Removed
+
+## 9. Sonar Standards
+
+- Cyclomatic complexity must stay **below 10** per method
+- Cognitive complexity must stay **below 15** per method
+- Avoid nesting deeper than **3 levels**
+- Do not leave dead code, unused variables, duplicated branches, or unreachable paths
+- Do not leave commented-out code
+- Do not add source-code comments to explain routine logic; prefer self-documenting names and extractions
+- If a method exceeds Sonar thresholds, split responsibilities into smaller private methods or collaborators

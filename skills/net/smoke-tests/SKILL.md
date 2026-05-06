@@ -1,9 +1,4 @@
 ---
-name: net-smoke-tests
-description: "Use when verifying that critical paths of the application still work after a deployment or significant change"
----
-
----
 name: smoke-tests
 description: "Post-migration smoke tests — verify that the service actually works end-to-end"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
@@ -43,6 +38,10 @@ Verify that the service can start without crashing:
 1. **Program.cs / Startup**
    - Read the entry file (Program.cs)
    - Verify the host configuration is correct
+   - Verify `ResolveSecrets` runs before Infrastructure DI or any provider registration
+   - Verify `Program.cs` delegates layer registrations to `ApplicationDependencyInjection`, `InfrastructureDependencyInjection`, and `ServicesConfiguration`
+   - Verify startup uses `await app.RunAsync()` or `await host.RunAsync()`
+   - Verify startup is not wrapped in a global `try/catch`
    - Verify all `builder.Services.Add*` have their implementations
    - Verify the middleware pipeline is in correct order
 
@@ -133,6 +132,7 @@ Exhaustive configuration check:
 3. **Azure Key Vault**
    - If Key Vault is used, verify references have correct format
    - Verify Key Vault initialization code is present
+   - Verify secret resolution happens before database, Service Bus, certificate, API key, or external provider configuration is consumed
 
 4. **Feature Flags**
    - If feature flags are used, verify they are configured

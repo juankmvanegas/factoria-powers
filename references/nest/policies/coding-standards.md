@@ -53,6 +53,14 @@ api → application ← infrastructure
 - Explicit parameter/return types; `async/await`; `readonly`; `?.` and `??`
 - Barrel files (`index.ts`) for module exports
 
+### Sonar Standards
+- Cyclomatic complexity must stay **below 10** per function or method
+- Cognitive complexity must stay **below 15** per function or method
+- Avoid nesting deeper than **3 levels**
+- No commented-out code or placeholder code blocks kept for later
+- Avoid source-code comments for routine logic; prefer extraction, naming, and typed abstractions
+- If a method grows beyond Sonar thresholds, split orchestration into smaller private methods or providers
+
 ## 4. NestJS-Specific Patterns
 
 ### Validation

@@ -1,9 +1,4 @@
 ---
-name: ang-new-project
-description: "Use when initializing a brand-new project from scratch following the factory template"
----
-
----
 name: new-project
 description: "Initialize Factoria-Ang in a project — from scratch or on an existing Angular project"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash

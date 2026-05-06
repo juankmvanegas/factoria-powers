@@ -16,24 +16,59 @@ detect_factory() {
   local dir="$1"
 
   # .NET: .sln / .csproj / Program.cs
+  local is_net=0
   if ls "$dir"/*.sln 2>/dev/null | grep -q . || \
      ls "$dir"/*.csproj 2>/dev/null | grep -q . || \
      [ -f "$dir/Program.cs" ]; then
-    # Check if it's also Angular (fullstack repo)
-    if [ -f "$dir/angular.json" ] || grep -qs '"@angular/core"' "$dir/package.json" 2>/dev/null; then
-      echo "both"
-      return
-    fi
+    is_net=1
+  fi
+
+  # Read package.json deps once
+  local has_angular=0 has_nest=0
+  if [ -f "$dir/package.json" ]; then
+    if grep -qs '"@angular/core"' "$dir/package.json"; then has_angular=1; fi
+    if grep -qs '"@nestjs/core"' "$dir/package.json"; then has_nest=1; fi
+  fi
+
+  # .NET + Angular = fullstack
+  if [ "$is_net" -eq 1 ] && ([ -f "$dir/angular.json" ] || [ "$has_angular" -eq 1 ]); then
+    echo "both"
+    return
+  fi
+
+  if [ "$is_net" -eq 1 ]; then
     echo "net"
     return
   fi
 
-  # Read package.json deps once
-  local has_angular=0 has_nest=0 has_next=0
-  if [ -f "$dir/package.json" ]; then
-    if grep -qs '"@angular/core"' "$dir/package.json"; then has_angular=1; fi
-    if grep -qs '"@nestjs/core"' "$dir/package.json"; then has_nest=1; fi
-    if grep -qs '"next"' "$dir/package.json"; then has_next=1; fi
+  # DataEng: databricks.yml / dlt.yml / pyspark / delta-spark
+  if [ -f "$dir/databricks.yml" ] || [ -f "$dir/dlt.yml" ] || \
+     grep -qs "pyspark\|delta-spark" "$dir/pyproject.toml" 2>/dev/null || \
+     grep -qs "pyspark\|delta-spark" "$dir/requirements.txt" 2>/dev/null; then
+    echo "dataeng"
+    return
+  fi
+
+  # Python MLOps: dvc.yaml / mlflow / dvc[azure]
+  if [ -f "$dir/dvc.yaml" ] || \
+     grep -qs "mlflow\|dvc\[azure\]" "$dir/pyproject.toml" 2>/dev/null; then
+    echo "pytml"
+    return
+  fi
+
+  # Python FastAPI: main.py / fastapi dep
+  if [ -f "$dir/main.py" ] || \
+     grep -qs "fastapi" "$dir/pyproject.toml" 2>/dev/null || \
+     grep -qs "fastapi" "$dir/requirements.txt" 2>/dev/null || \
+     grep -qs "fastapi" "$dir/requirements-dev.txt" 2>/dev/null; then
+    echo "pyt"
+    return
+  fi
+
+  # NestJS
+  if [ "$has_nest" -eq 1 ]; then
+    echo "nest"
+    return
   fi
 
   # Angular: angular.json or @angular/core dep
@@ -42,24 +77,27 @@ detect_factory() {
     return
   fi
 
-  # NestJS (before Next.js — NestJS projects don't have next.config.*)
-  if [ "$has_nest" -eq 1 ]; then
-    echo "nest"
+  # iOS/Swift: .swift files / Package.swift / .xcodeproj
+  if ls "$dir"/*.swift 2>/dev/null | grep -q . || \
+     [ -f "$dir/Package.swift" ] || \
+     ls "$dir"/*.xcodeproj 2>/dev/null | grep -q . || \
+     ls "$dir"/*.xcworkspace 2>/dev/null | grep -q .; then
+    echo "swf"
     return
   fi
 
-  # Next.js: next.config.* or "next" dep
-  if ls "$dir"/next.config.* 2>/dev/null | grep -q . || [ "$has_next" -eq 1 ]; then
-    echo "next"
+  # WordPress Block Theme: theme.json + functions.php + style.css, or wp-content/
+  if ([ -f "$dir/theme.json" ] && [ -f "$dir/functions.php" ] && [ -f "$dir/style.css" ]) || \
+     [ -d "$dir/wp-content" ]; then
+    echo "wps"
     return
   fi
 
-  # Python: pyproject.toml / requirements.txt / .python-version
-  if [ -f "$dir/pyproject.toml" ] || \
-     [ -f "$dir/requirements.txt" ] || \
-     [ -f "$dir/.python-version" ] || \
-     [ -f "$dir/main.py" ]; then
-    echo "python"
+  # Android/Kotlin: build.gradle.kts / *.kt / AndroidManifest.xml
+  if [ -f "$dir/build.gradle.kts" ] || \
+     ls "$dir"/*.kt 2>/dev/null | grep -q . || \
+     find "$dir" -maxdepth 3 -name "AndroidManifest.xml" 2>/dev/null | grep -q .; then
+    echo "kot"
     return
   fi
 
@@ -87,7 +125,7 @@ escape_for_json() {
 using_factoria_escaped=$(escape_for_json "$using_factoria_content")
 
 if [ "$FACTORY" = "unknown" ]; then
-  factory_header="Factory not auto-detected. Ask the user which factory applies (net | ang | nest | next | python), then invoke skill 'factoria:selecting-factory'."
+  factory_header="Factory not auto-detected. Ask the user which factory applies (net | ang | nest | pyt | pytml | dataeng | kot | swf | wps), then invoke skill 'factoria:selecting-factory'."
 elif [ "$FACTORY" = "both" ]; then
   factory_header="Detected multi-factory project (.NET + Angular). Active references: references/net/ and references/ang/. Ask the user which context is active for this session, or load both via skill 'factoria:loading-factory-context'."
 else

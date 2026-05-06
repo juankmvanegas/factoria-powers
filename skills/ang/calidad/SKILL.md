@@ -1,9 +1,4 @@
 ---
-name: ang-calidad
-description: "Use when code quality needs to be checked — linting, conventions, patterns, and coding standards compliance"
----
-
----
 name: calidad
 description: "Auto-skill for Angular tests, validation, and quality gates"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
@@ -37,6 +32,8 @@ user-invocable: false
 - Guards/Interceptors: 100% with tests
 - Build: successful
 - Lint: clean
+- Sonar-aligned complexity: cyclomatic < 10 and cognitive < 15 per function
+- No commented-out code and no routine source-code comments added just to explain logic
 
 ## Rules
 
