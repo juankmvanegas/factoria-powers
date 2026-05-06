@@ -11,12 +11,23 @@ Factoria enforces Clean Architecture, mandatory policies, ADRs per factory, spec
 | **Claude Code** | `/plugin marketplace add juankmvanegas/factoria-powers` then `/plugin install factoria@factoria-powers` |
 | **Cursor** | Cursor plugin marketplace → search "factoria" |
 | **Codex App** | Codex App marketplace → search "factoria" |
-| **Codex CLI** | `codex plugin marketplace add juankmvanegas/factoria-powers && codex plugin install factoria` |
+| **Codex CLI** | `codex plugin marketplace add juankmvanegas/factoria-powers && codex plugin install factoria@factoria-powers` |
 | **Gemini CLI** | `gemini extensions install https://github.com/juankmvanegas/factoria-powers` |
 | **OpenCode** | Add `"factoria@git+https://github.com/juankmvanegas/factoria-powers.git"` to `opencode.json` |
-| **Factory Droid** | `droid plugin marketplace add juankmvanegas/factoria-powers && droid plugin install factoria` |
+| **Factory Droid** | `droid plugin marketplace add juankmvanegas/factoria-powers && droid plugin install factoria@factoria-powers` |
 | **Copilot CLI** | `copilot plugin marketplace add juankmvanegas/factoria-powers` then `copilot plugin install factoria@factoria-powers` |
-| **Manual (any CLI)** | `git clone https://github.com/juankmvanegas/factoria-powers ~/.claude/plugins/factoria` |
+
+## Updating
+
+Re-run the install command for your CLI — it pulls the latest version:
+
+| CLI | Update command |
+|---|---|
+| **Claude Code** | `/plugin install factoria@factoria-powers` |
+| **Copilot CLI** | `copilot plugin install factoria@factoria-powers` |
+| **Codex CLI** | `codex plugin install factoria@factoria-powers` |
+| **Gemini CLI** | `gemini extensions update factoria` |
+| **Factory Droid** | `droid plugin install factoria@factoria-powers` |
 
 ## Factories
 
@@ -37,15 +48,6 @@ Factoria enforces Clean Architecture, mandatory policies, ADRs per factory, spec
 On session start, a hook auto-detects your project's factory from cwd signals (`.csproj`, `angular.json`, `@nestjs/core`, `databricks.yml`, `dvc.yaml`, `main.py`, `Package.swift`, `theme.json`, `build.gradle.kts`, etc.) and injects the **Factoria bootstrap** into the agent's first turn. The agent then loads skills on demand via its native skill tool.
 
 For Claude Code, 12 enforcement hooks (`.cjs`) fire on PreToolUse/PostToolUse to enforce naming, secrets, architecture, golden-path packages, and commit conventions at runtime. Other CLIs use the `validate-compliance` skill for textual enforcement.
-
-## Updating
-
-```bash
-# Claude Code plugin dir (adjust path as needed)
-cd ~/.claude/plugins/factoria && git pull
-```
-
-Or use your CLI's marketplace update command.
 
 ## License
 

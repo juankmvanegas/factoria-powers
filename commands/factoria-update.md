@@ -1,27 +1,38 @@
 # /factoria-update
 
-Update the Factoria plugin to the latest version.
+Update the Factoria plugin to the latest version using your CLI's native update mechanism.
 
-## Steps
+## Claude Code
 
-1. Find the plugin directory (where this file lives — `${CLAUDE_PLUGIN_ROOT}` or equivalent)
-2. Run: `git pull` in that directory
-3. Confirm the update with: `git log --oneline -5`
-4. Reload the session context by invoking skill `factoria:loading-factory-context`
+```
+/plugin install factoria@factoria-powers
+```
 
-## Example (Claude Code on Unix/Mac)
+## Copilot CLI
 
 ```bash
-cd ~/.claude/plugins/factoria && git pull
+copilot plugin install factoria@factoria-powers
 ```
 
-## Example (Claude Code on Windows)
+## Codex CLI
 
-```powershell
-cd $env:USERPROFILE\.claude\plugins\factoria; git pull
+```bash
+codex plugin install factoria@factoria-powers
 ```
 
-## After update
+## Gemini CLI
 
-- Check `RELEASE-NOTES.md` for what changed
-- If policies or ADRs were updated, reload context with `/factoria-load`
+```bash
+gemini extensions update factoria
+```
+
+## Factory Droid
+
+```bash
+droid plugin install factoria@factoria-powers
+```
+
+## After updating
+
+- Check `RELEASE-NOTES.md` for what changed.
+- Reload factory context in the current session with `/factoria-load`.
