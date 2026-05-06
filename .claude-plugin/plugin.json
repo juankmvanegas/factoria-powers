@@ -1,0 +1,25 @@
+{
+  "name": "factoria",
+  "description": "Factoria — Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement hooks for .NET, Angular, NestJS, Next.js and Python projects",
+  "version": "1.0.0",
+  "author": {
+    "name": "Factoria Team",
+    "email": "factoria@factoria.dev"
+  },
+  "homepage": "https://github.com/factoria-org/factoria-powers",
+  "repository": "https://github.com/factoria-org/factoria-powers",
+  "license": "MIT",
+  "keywords": [
+    "factoria",
+    "skills",
+    "clean-architecture",
+    "dotnet",
+    "angular",
+    "nestjs",
+    "nextjs",
+    "python",
+    "enforcement",
+    "adr",
+    "workflows"
+  ]
+}

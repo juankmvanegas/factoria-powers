@@ -1,0 +1,6 @@
+{
+  "name": "factoria",
+  "description": "Factoria — Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement for .NET, Angular, NestJS, Next.js and Python projects",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md"
+}
