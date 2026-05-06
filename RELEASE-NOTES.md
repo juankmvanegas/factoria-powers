@@ -1,5 +1,21 @@
 # Factoria Plugin — Release Notes
 
+## v1.1.1 — 2026-05-06
+
+Fix marketplace name mismatch — `/plugin install factoria@factoria-powers` now works without manual clone.
+
+### Changes
+- `marketplace.json`: renamed marketplace `name` from `factoria-dev` to `factoria-powers` so the install suffix matches
+- Version bumped to 1.1.1 in all 6 manifests
+
+### Upgrade
+```
+/plugin marketplace add juankmvanegas/factoria-powers
+/plugin install factoria@factoria-powers
+```
+
+---
+
 ## v1.1.0 — 2026-05-06
 
 Sync with `sc-nes-factoria` (updated source). 9 factories active; QA layer added to all factories.
