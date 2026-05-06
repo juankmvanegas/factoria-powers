@@ -1,0 +1,8 @@
+* text=auto
+*.sh text eol=lf
+hooks/session-start text eol=lf
+hooks/run-hook.cmd text eol=crlf
+*.cjs text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
