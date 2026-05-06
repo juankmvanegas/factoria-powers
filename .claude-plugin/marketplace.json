@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "factoria-powers",
   "description": "Marketplace for Factoria Full Stack Software Factory plugin",
   "owner": {
@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "factoria",
-      "description": "Factoria â€” Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement hooks for .NET, Angular, NestJS, Next.js and Python projects",
+      "description": "Factoria — Full Stack Software Factory: opinionated rules, ADRs, agents, skills and enforcement hooks for .NET, Angular, NestJS, Next.js and Python projects",
       "version": "1.1.1",
       "source": "./",
       "author": {
