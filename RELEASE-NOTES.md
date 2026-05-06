@@ -1,5 +1,36 @@
 # Factoria Plugin — Release Notes
 
+## v1.1.3 — 2026-05-06
+
+Fix PowerShell incompatibility — hooks now work in Copilot CLI and any Windows host that executes commands via PowerShell.
+
+### Changes
+
+**SEV-1 — Runtime fix (PowerShell hosts):**
+- `hooks/run-hook.cjs` *(new)*: Node.js cross-platform hook dispatcher, replaces the cmd/bash polyglot `run-hook.cmd`
+- `hooks/hooks.json`: all 12 hook commands changed from `"\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" <name>"` to `"node \"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cjs\" <name>"`
+- `hooks/hooks-cursor.json`: same update for `sessionStart` hook
+
+**Root cause:** PowerShell parses `"quoted/path.cmd" arg` as a string-literal expression, then `arg` as an unexpected token (`ParserError: UnexpectedToken`). Changing to `node "quoted/path.cjs" arg` works in PowerShell, cmd.exe, and bash uniformly — the first token is now a plain executable, not a quoted path.
+
+**`run-hook.cmd` is preserved** as a legacy fallback (not deleted). `run-hook.cjs` dispatch logic: `.cjs` hooks execute directly via the current Node process; extensionless bash hooks (e.g. `session-start`) still invoke Git Bash with the same fallback chain.
+
+### Known limitation
+
+Node.js must be on PATH. Node is already a hard dependency for the 16 `.cjs` enforcement and lifecycle hooks — if Node is unavailable, hooks were already non-functional before this change.
+
+### Upgrade
+```
+/plugin install factoria@factoria-powers
+```
+Or reinstall:
+```
+/plugin marketplace add juankmvanegas/factoria-powers
+/plugin install factoria@factoria-powers
+```
+
+---
+
 ## v1.1.2 — 2026-05-06
 
 Comprehensive sweep of residual MCP-server and 5-factory references after v1.1.x partial fixes.
