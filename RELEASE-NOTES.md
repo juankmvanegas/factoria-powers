@@ -1,5 +1,27 @@
 # Factoria Plugin — Release Notes
 
+## v1.1.4 — 2026-05-06
+
+Reduce SessionStart context overhead — ~30× less context per session.
+
+### Changes
+
+**Performance:**
+- `hooks/session-start`: removed inline injection of the full `using-factoria` SKILL body. SessionStart now emits only the detected factory + a directive to invoke the skill on the first turn. The model loads the SKILL body lazily via the `Skill` tool when needed.
+- Output size per SessionStart: ~8 KB → ~280 bytes (30× reduction).
+- Behavior unchanged: the model still invokes `factoria:using-factoria` before responding, which loads the same bootstrap workflow on demand.
+
+### Why
+
+`using-factoria/SKILL.md` is 8 KB and was being injected into every conversation's context window via SessionStart, even on sessions where Factoria workflows aren't used. The plugin model already loads SKILL frontmatter into the system prompt for skill discovery, so the body only needs to be read when the skill is actually invoked.
+
+### Upgrade
+```
+/plugin install factoria@factoria-powers
+```
+
+---
+
 ## v1.1.3 — 2026-05-06
 
 Fix PowerShell incompatibility — hooks now work in Copilot CLI and any Windows host that executes commands via PowerShell.

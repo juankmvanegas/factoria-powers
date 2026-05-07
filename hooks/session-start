@@ -107,34 +107,27 @@ detect_factory() {
 FACTORY=$(detect_factory "$CWD")
 
 # ---------------------------------------------------------------------------
-# Build context message
+# Build context message — minimal injection, lazy-load skill on demand
+# ---------------------------------------------------------------------------
+# Saves ~8KB of context per session vs. inlining the full using-factoria SKILL.
+# The model invokes the skill on its first turn; the body loads only then.
 # ---------------------------------------------------------------------------
 
-using_factoria_content=$(cat "${PLUGIN_ROOT}/skills/using-factoria/SKILL.md" 2>&1 || echo "Error reading using-factoria skill")
-
-escape_for_json() {
-  local s="$1"
-  s="${s//\\/\\\\}"
-  s="${s//\"/\\\"}"
-  s="${s//$'\n'/\\n}"
-  s="${s//$'\r'/\\r}"
-  s="${s//$'\t'/\\t}"
-  printf '%s' "$s"
-}
-
-using_factoria_escaped=$(escape_for_json "$using_factoria_content")
-
 if [ "$FACTORY" = "unknown" ]; then
-  factory_header="Factory not auto-detected. Ask the user which factory applies (net | ang | nest | pyt | pytml | dataeng | kot | swf | wps), then invoke skill 'factoria:selecting-factory'."
+  factory_line="Factory not auto-detected."
 elif [ "$FACTORY" = "both" ]; then
-  factory_header="Detected multi-factory project (.NET + Angular). Active references: references/net/ and references/ang/. Ask the user which context is active for this session, or load both via skill 'factoria:loading-factory-context'."
+  factory_line="Detected multi-factory project (.NET + Angular). Active references: references/net/ and references/ang/."
 else
-  factory_header="Detected factory: ${FACTORY}. References at: references/${FACTORY}/. Load full context with skill 'factoria:loading-factory-context'."
+  factory_line="Detected factory: ${FACTORY}. References at: references/${FACTORY}/."
 fi
 
-factory_header_escaped=$(escape_for_json "$factory_header")
+# JSON-escape any quote/backslash chars that may have leaked into factory_line.
+factory_line="${factory_line//\\/\\\\}"
+factory_line="${factory_line//\"/\\\"}"
 
-session_context="<EXTREMELY_IMPORTANT>\nYou have Factoria.\n\n${factory_header_escaped}\n\n**Below is the full content of your 'factoria:using-factoria' skill — your introduction to Factoria. For all other skills, use the 'Skill' tool:**\n\n${using_factoria_escaped}\n</EXTREMELY_IMPORTANT>"
+# Build session_context with embedded \n (literal backslash+n) so JSON parses
+# them as newline escapes when the host CLI deserializes the hook output.
+session_context="<EXTREMELY_IMPORTANT>\nYou have Factoria. ${factory_line}\n\nBEFORE responding to the user, invoke skill \`factoria:using-factoria\` to load the bootstrap workflow.\n</EXTREMELY_IMPORTANT>"
 
 # ---------------------------------------------------------------------------
 # Output correct JSON shape per host CLI
