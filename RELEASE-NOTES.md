@@ -1,5 +1,52 @@
 # Factoria Plugin — Release Notes
 
+## v1.2.0 — 2026-06-05
+
+Sync with `sc-nes-factoria` upstream through 2026-05-20. The plugin's last content sync was 2026-05-06, so all upstream changes between 2026-05-07 and 2026-05-20 (plus a few missed 2026-04-30 deltas) are now ported. Audited file-by-file against upstream — not by commit messages.
+
+### Factory content syncs
+
+**net (.NET):**
+- **Mapster replaces AutoMapper** (upstream 2026-05-07): deleted `ADR-010-automapper-dto-mapping`, added `ADR-010-mapster-dto-mapping`, and swept all AutoMapper→Mapster references across `backend`, `codebase-analyst`, `health-check`, `smoke-tests` skills, `coding-standards`, `testing-policy`, `current.md`, `CLAUDE.md`, `ADR-003`, `ADR-004`. Zero AutoMapper residue remains.
+- **Performance scaffolding REST/gRPC + k6** (upstream 2026-05-20): re-ported `net-perf-test` (was a stub) with REST vs gRPC template selection, k6 MCP-preferred + Docker fallback; refreshed `net-qa-release-gate`, `net-qa-report`, `net-qa-run-suite`.
+
+**ang (Angular):**
+- **Playwright MCP-first** (upstream 2026-05-20): reverted a regression — the plugin still said "CLI is preferred over MCP"; `playwright-cli` and `playwright-visual` now prefer the Playwright MCP with CLI as fallback, and `references/ang/CLAUDE.md` documents the `claude mcp add playwright …` setup.
+- **Perf/k6**: re-ported `ang-perf-test` (was a stub), `ang-qa-report`, `ang-qa-run-suite`.
+
+**dataeng (Databricks):**
+- **Legacy Databricks patterns** (upstream 2026-05-19): added `ADR-015-legacy-notebook-first-compatibility` and `ADR-016-synapse-publication-boundary`; re-ported the `dataeng` and `migration-discovery` skills and `coding-standards`, `testing-policy`, `current.md`, `CLAUDE.md` with `co_ppal_*/co_dl_*/co_dwh_*` notebook roles, `/mnt` lake zones, reproceso/one-time flows, and Synapse publication boundaries.
+
+**wps (WordPress):**
+- Added the "Recommended MCPs (Web QA)" Playwright-MCP section to `references/wps/CLAUDE.md` (upstream 2026-05-20).
+
+**Cross-cutting QA discipline** (net + ang): ported the Azure DevOps **work-item context intake** — `qa-policy` now has a "Functional Intake from Azure DevOps" section and the `.cloud/qa/context/work-item-context.md` artifact; `qa-strategy`/`qa-plan` skills ask for the work item id first. Phrased CLI-agnostically (the plugin has no bundled MCP server).
+
+### New cross-factory orchestration skills
+
+The orchestrator referenced `/openapi-generator`, `/sync-contracts`, `/validate-integration` but no backing files existed. Ported all three from upstream as top-level shared skills (`skills/openapi-generator`, `skills/sync-contracts`, `skills/validate-integration`), generalized from the upstream 2-factory model to the 9-factory model, MCP-server calls removed.
+
+### `/factoria-init` now scaffolds the QA workspace
+
+The QA skills write under `.cloud/qa/…` but init never created it. `/factoria-init` now scaffolds the `.cloud/qa/{context,strategy,plans,scenarios,cases,automation,reports,templates}/` workspace + `.qa-reports/` + seed files for all factories, and the k6/SAST/DAST tooling templates (`rest-smoke.js`, `grpc-smoke.js`, `run-perf.sh`, `semgrep/rules.yml`, …) for `net`, `nest`, `pyt` (REST/gRPC) and `ang` (browser).
+
+### Internal coherence fixes
+
+- **pyt ADR collision resolved**: the factory had two overlapping ADR sets with duplicate numbers. The upstream-canonical lineage keeps `ADR-001…014`; genuinely distinct decisions (uv, sqlalchemy-async repository, celery/redis, import-linter, github-actions, multiple-init) were renumbered to `ADR-015…021`; six contradictory duplicates were merged into their canonical ADR and removed. The set is now contiguous `001…021` with no collisions.
+- Orchestrator factory list confirmed coherent (9 factories incl. `dataeng`) — already correct; the upstream's own orchestrator omits DataEng and miscounts.
+- Removed the stale `nextjs` keyword from the plugin/cursor/codex manifests (the `next` factory was removed in v1.1.0).
+
+### Not ported (intentional)
+- `Factoria-Nes` (legacy NestJS gRPC BFF) — not in upstream's authoritative factory list; correctly excluded.
+- MCP-server-internal wiring (`.mcp.json` server blocks, Hermes installer, `bootstrap-project.ts` mechanics) — the plugin is content-only and dropped the server. External-MCP *guidance* (Azure DevOps / Playwright / k6) was kept where user-facing.
+
+### Upgrade
+```
+/plugin install factoria@factoria-powers
+```
+
+---
+
 ## v1.1.4 — 2026-05-06
 
 Reduce SessionStart context overhead — ~30× less context per session.

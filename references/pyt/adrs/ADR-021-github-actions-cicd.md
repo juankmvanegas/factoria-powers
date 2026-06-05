@@ -1,4 +1,4 @@
-# ADR-014: GitHub Actions for CI/CD
+# ADR-021: GitHub Actions for CI/CD
 
 ## Status
 Accepted
@@ -59,7 +59,7 @@ jobs:
 - **Lint before tests**: Catch formatting and style issues before running expensive test suites
 - **Architecture tests before unit tests**: Structural violations are cheapest to detect
 - **Separate jobs for quality, build, and deploy**: Clear separation of concerns
-- **`uv` for all Python commands**: Consistent with ADR-003
+- **`uv` for all Python commands**: Consistent with ADR-015
 - **Matrix strategy** for testing against multiple Python versions (3.12, 3.13) when applicable
 - **Caching**: `uv` cache and Docker layer caching for faster pipelines
 - **Branch protection**: `main` requires passing CI and at least one approval

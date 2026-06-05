@@ -46,12 +46,12 @@ Dependencies flow **always inward**: Initialization → Infrastructure → Appli
 - Inject `IManageLogs` via constructor like any other dependency.
 - Log relevant events: errors, warnings, and critical business operations.
 
-## AutoMapper — Mapping Profiles
+## Mapster — Mapping Configuration
 
-- Create AutoMapper profiles for each Entity ↔ DTO conversion.
-- Profiles reside in the Application layer.
-- One profile per aggregate or functional context.
-- Do not perform manual mappings when AutoMapper can handle them.
+- Create Mapster `TypeAdapterConfig` configuration for each Entity ↔ DTO conversion.
+- Mapping configuration resides in the Application layer.
+- One configuration class per aggregate or functional context.
+- Do not perform manual mappings when Mapster can handle them.
 
 ## FluentValidation at API Boundaries
 
@@ -71,7 +71,7 @@ Dependencies flow **always inward**: Initialization → Infrastructure → Appli
 
 Each layer registers its own dependencies in its designated class:
 
-- **Application** → `ApplicationDependencyInjection` — registers application services, validators, AutoMapper profiles.
+- **Application** → `ApplicationDependencyInjection` — registers application services, validators, Mapster configuration.
 - **Infrastructure** → `InfrastructureDependencyInjection` — registers repositories, contexts, external adapters.
 - **Initialization** → `ServicesConfiguration` — composes the above and adds middleware, authentication, Swagger, etc.
 

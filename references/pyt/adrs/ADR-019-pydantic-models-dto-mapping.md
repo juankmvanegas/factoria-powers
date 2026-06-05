@@ -1,4 +1,4 @@
-# ADR-010: Pydantic Models as DTOs with Built-in Mapping
+# ADR-019: Pydantic Models as DTOs with Built-in Mapping
 
 ## Status
 Accepted

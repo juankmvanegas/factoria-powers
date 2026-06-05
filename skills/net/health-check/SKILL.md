@@ -42,7 +42,7 @@ Verify the project follows Factoria's 4-layer structure:
 | DI registration classes | 2 | Extension classes for per-layer DI registration exist |
 | BusinessException | 2 | BusinessException (or Factoria equivalent) used instead of raw exceptions |
 | IManageLogs | 2 | IManageLogs used for logging, not static loggers or `Console.Write` |
-| AutoMapper profiles | 1 | AutoMapper profiles exist for DTOs |
+| Mapster configuration | 1 | Mapster `TypeAdapterConfig` configuration exists for DTOs |
 | FluentValidation | 1 | FluentValidation used at API boundaries |
 
 ### Phase 3: Security Verification (25 points)

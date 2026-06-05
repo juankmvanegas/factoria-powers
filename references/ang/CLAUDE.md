@@ -75,11 +75,12 @@ If the user **requests modifications**: adjust the proposal and ask again.
 |-----|---------|-------|
 | **Figma** | Read Figma designs directly (tokens, structure, assets) | `claude mcp add --transport http figma https://mcp.figma.com/mcp` |
 | **Google Stitch** | Generate UI with AI, export HTML/CSS, screen screenshots | `claude mcp add stitch -- npx @_davideast/stitch-mcp proxy` |
-| **Playwright** | Capture browser screenshots for visual auto-correction | `npx playwright install chromium` (CLI, not MCP) |
+| **Playwright** | Browser automation, screenshots, assertions, storage state, and visual auto-correction | `claude mcp add playwright npx @playwright/mcp@latest --caps=network,storage,testing,devtools` |
 
 **Figma MCP** is for when the design team delivers mockups in Figma.
 **Stitch MCP** is for rapid prototyping with AI or when reference HTML is desired.
 **Both** can be used together: Figma for exact tokens + Stitch for base HTML.
+**Playwright MCP** is the preferred browser automation path for QA, screenshots, rendering issues, responsive regressions, and interactive debugging. Use raw Playwright CLI only as fallback when MCP is unavailable.
 
 ## Architecture: Clean Architecture 3 Layers + Atomic Design (ADR-001)
 

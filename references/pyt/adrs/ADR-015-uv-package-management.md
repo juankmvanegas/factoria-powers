@@ -1,4 +1,4 @@
-# ADR-003: uv as Package Manager
+# ADR-015: uv as Package Manager
 
 ## Status
 Accepted

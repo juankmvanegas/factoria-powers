@@ -23,7 +23,8 @@ Use NuGet Central Package Management via `Directory.Packages.props` at the solut
 | API | Swashbuckle | 6.5.0 |
 | Messaging | Azure.Messaging.ServiceBus | 7.17.3 |
 | Validation | FluentValidation.AspNetCore | 11.3.0 |
-| Mapping | AutoMapper | 12.0.1 |
+| Mapping | Mapster | 10.0.7 |
+| Mapping | Mapster.DependencyInjection | 10.0.7 |
 | Observability | OpenTelemetry.* | 1.5.0+ |
 | Logging | Serilog | 2.12.0 |
 | Jobs | Hangfire | 1.8.1 |

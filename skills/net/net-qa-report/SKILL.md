@@ -15,6 +15,9 @@ Create a human-readable QA summary after one suite or a full validation cycle.
 - `.cloud/qa/reports/{date}/{suite}/report.md`
 
 ## Rules
+- Ensure the required upstream QA artifacts and suite reports already exist before consolidating.
+- If a suite was executed without curated QA files in `.cloud/qa/`, create the missing structure and backfill the artifacts before reporting.
 - Summaries must include risk, not just counts.
 - Recommendation must be explicit: GO / GO WITH RISKS / NO-GO.
 - Open critical defects or critical findings force NO-GO unless an approved exception exists.
+- Performance reports must reference the baseline and identify whether evidence came from the k6 MCP flow (if configured) or the Docker fallback.

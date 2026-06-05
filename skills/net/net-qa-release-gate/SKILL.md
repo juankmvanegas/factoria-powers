@@ -31,3 +31,4 @@ Consolidate functional, regression, performance, SAST, and DAST evidence into a 
 - A missing mandatory suite prevents GO.
 - Open critical defects or exploitable critical findings force NO-GO.
 - Risks accepted by exception must be listed explicitly.
+- If performance is mandatory for the scope, the gate must reference a k6-backed report or explicitly mark the absence as a blocker.

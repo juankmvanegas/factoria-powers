@@ -1,6 +1,6 @@
 {
   "name": "factoria",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Factoria — Full Stack Software Factory with opinionated ADRs, policies, agents, skills and enforcement hooks for .NET, Angular, NestJS, Python (FastAPI), Python MLOps, Databricks, Kotlin, iOS Swift, and WordPress.",
   "author": {
     "name": "Factoria Team",
@@ -16,7 +16,6 @@
     "dotnet",
     "angular",
     "nestjs",
-    "nextjs",
     "pyt",
     "pytml",
     "dataeng",

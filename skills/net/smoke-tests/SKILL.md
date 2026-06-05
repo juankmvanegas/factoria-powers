@@ -101,8 +101,8 @@ Deep analysis of injected dependencies:
    - Detect missing dependencies (interface registered but implementation not found)
    - Detect dependency cycles
 
-2. **AutoMapper verification**
-   - Verify profiles exist for all used mappings
+2. **Mapster verification**
+   - Verify `TypeAdapterConfig` configuration exists for all used mappings
    - Verify source and destination types are compatible
    - Detect unmapped properties that should be mapped
 

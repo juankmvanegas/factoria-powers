@@ -76,7 +76,7 @@ Infrastructure.Services.[Provider]
 - Unit of Work for SQL Server transactions
 - Generic repository for basic CRUD
 - Specific adapters for specialized data access
-- AutoMapper profiles for all entity-DTO mappings
+- Mapster `TypeAdapterConfig` configurations for all entity-DTO mappings
 
 ## 4. Service Patterns
 

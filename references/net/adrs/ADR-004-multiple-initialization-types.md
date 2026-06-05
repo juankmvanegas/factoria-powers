@@ -20,7 +20,7 @@ Support 4 initialization types in the `Initialization` layer, each as a separate
 
 ### 2. GrpcApiService.ServiceName
 - ASP.NET Core gRPC service
-- Includes: Exception interceptors (`ExceptiongRPCInterceptor`), Validations, AutoMapper profiles (`GRPCProfile`)
+- Includes: Exception interceptors (`ExceptiongRPCInterceptor`), Validations, Mapster configuration (`GRPCMappingConfig`)
 
 ### 3. MessagingService.ServiceName
 - Azure Service Bus consumer

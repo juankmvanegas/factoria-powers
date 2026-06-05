@@ -39,7 +39,7 @@ Analyze the legacy project structure (using the path obtained in Phase 0):
 
 1. Identify the folder/project structure
 2. Map modules/functional areas
-3. Identify architecture patterns used (MVC, n-tier, microservices, etc.)
+3. Identify architecture patterns used (bundle-first, notebook-first by domain, medallion, warehouse publication, etc.)
 4. List all external dependencies (packages, APIs, services)
 
 ### Phase 2: Entity Extraction
@@ -83,6 +83,15 @@ For each table/collection:
 5. Estimated volume data
 6. **Confidence**: High / Medium / Low
 
+For legacy Data Engineering repositories, also extract:
+
+1. Domain folders and their business responsibility
+2. Notebook prefixes and naming conventions (`co_ppal_*`, `co_dl_*`, `co_dwh_*`)
+3. Shared utility modules under folders such as `configuracion/`, `clases/`, and `Plantillas/`
+4. Mounted route conventions (`/mnt/transporte`, `/mnt/cruda`, `/mnt/formateada`, `/mnt/refinada`, `/mnt/parametros`, `/mnt/configuracion`)
+5. Reprocess, one-time, and test operational flows
+6. Publication targets such as Synapse tables or schemas
+
 ### Phase 6: Dependency Extraction
 
 1. Internal dependencies (between modules)
@@ -99,6 +108,7 @@ Create the following files in `.cloud/planning/legacy-discovery/`:
 - `data-schema.md` — Complete data schema
 - `dependencies.md` — Dependency graph
 - `summary.md` — Executive summary with statistics
+- `operating-model.md` — execution model, mounted paths, widgets, `%run` chains, and notebook role mapping
 
 Each file must include the **confidence scoring** for each element:
 
@@ -134,3 +144,4 @@ Wait for the team to:
 - ALWAYS wait for team validation before considering it complete
 - If the legacy is very large, divide discovery by modules
 - Document EVERYTHING found, even if it appears to be dead code
+- In Data Engineering legacy estates, explicitly distinguish recurring daily loads, reprocesos, and one-time corrective flows

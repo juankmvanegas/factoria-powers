@@ -57,7 +57,7 @@ If the user **requests modifications**: adjust the proposal and ask again.
 | gRPC API | Grpc.AspNetCore | 2.52.0 |
 | Messaging | Azure.Messaging.ServiceBus | 7.17.3 |
 | Validation | FluentValidation | 11.3.0 |
-| Mapping | AutoMapper | 12.0.1 |
+| Mapping | Mapster | 10.0.7 |
 | Observability | OpenTelemetry + Serilog | 1.5.0+ / 2.12.0 |
 | Jobs | Hangfire / Coravel | 1.8.1 / 4.2.1 |
 | Testing | xUnit + Moq + FluentAssertions | 2.6.6 / 4.18.4 / 6.12.0 |
@@ -199,7 +199,7 @@ Infrastructure.Services.[Provider]
 - Nullable reference types: enabled per project
 - `IManageLogs` for logging (never static loggers)
 - `BusinessException` for business errors
-- AutoMapper profiles for all entity-DTO mapping
+- Mapster `TypeAdapterConfig` configurations for all entity-DTO mapping
 - Unit of Work for SQL Server transactions
 - Generic repository for basic CRUD
 - Specific adapters for specialized data access
@@ -599,7 +599,7 @@ Step 3: /migration-execute [module name]
 | ADR-007 | OpenTelemetry + Serilog for Observability | Accepted |
 | ADR-008 | Azure Key Vault for Secrets | Accepted |
 | ADR-009 | FluentValidation for Validation | Accepted |
-| ADR-010 | AutoMapper for DTO Mapping | Accepted |
+| ADR-010 | Mapster for DTO Mapping | Accepted |
 | ADR-011 | xUnit with Test Doubles Pattern | Accepted |
 | ADR-012 | NetArchTest for Architecture Tests | Accepted |
 | ADR-013 | BusinessException Pattern | Accepted |

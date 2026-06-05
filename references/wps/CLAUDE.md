@@ -93,6 +93,14 @@ Create a new skill when:
 | Surveys | Qualtrics SDK | - |
 | Theme Type | Block Theme (Full-Site Editing) | - |
 
+## Recommended MCPs (Web QA)
+
+| MCP | Purpose | Setup |
+|-----|---------|-------|
+| **Playwright** | Browser automation, screenshots, assertions, storage state, and validation of Gutenberg/FSE flows | `claude mcp add playwright npx @playwright/mcp@latest --caps=network,storage,testing,devtools` |
+
+**Playwright MCP** is the preferred browser automation path for custom block rendering, FSE template validation, responsive regressions, menus, modals, forms, and end-user website journeys. Use raw Playwright CLI only as fallback when MCP is unavailable.
+
 ## Architecture: Block Theme + Custom Gutenberg Blocks (Pro Max)
 
 ### Block Registration Flow

@@ -81,7 +81,7 @@ public void GetNote_WhenNoteExists_ReturnsNoteOutput()
 ### What to Test
 - **Application services** (Simple and Compound) - primary test target
 - **Architecture rules** - layer dependency validation
-- **DTOs and Mappings** - AutoMapper profile correctness
+- **DTOs and Mappings** - Mapster configuration correctness
 
 ### What NOT to Test (in unit tests)
 - Infrastructure implementations (use test doubles instead)

@@ -1,4 +1,4 @@
-# ADR-006: Celery + Redis for Asynchronous Tasks
+# ADR-018: Celery + Redis for Asynchronous Tasks
 
 ## Status
 Accepted

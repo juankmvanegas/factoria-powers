@@ -57,7 +57,7 @@ monorepo blueprint that serves as the canonical reference for all new backend se
 ### Application Layer
 - **Services/Simple:** Single-responsibility use cases (e.g., `NotesService`, `ClearAllService`)
 - **Services/Compound:** Orchestrated use cases combining multiple services (e.g., `NoteListsService`)
-- **DTOs:** Input/Output data transfer objects with AutoMapper `MappingProfile`
+- **DTOs:** Input/Output data transfer objects with Mapster `TypeAdapterConfig`
 - **Interfaces/Services:** Use case contracts (e.g., `INotesUseCase`, `INoteListsUseCase`)
 - **Interfaces/Infrastructure:** Repository/adapter contracts (e.g., `INotasRepository`, `IFirebaseAdapter`)
 - **Common/Helpers:** `ManageLogs` (structured logging), `BusinessException` (error handling)

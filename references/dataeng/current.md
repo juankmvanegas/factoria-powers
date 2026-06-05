@@ -9,7 +9,8 @@ Factoria-DataEng defines a **Data Engineering** baseline for Azure Databricks pr
 - Unity Catalog permissions and lineage,
 - Lakeflow or Databricks Jobs orchestration,
 - data quality gates,
-- and production observability.
+- production observability,
+- and, when applicable, Synapse publication contracts.
 
 ## Conceptual Flow
 
@@ -17,19 +18,25 @@ Factoria-DataEng defines a **Data Engineering** baseline for Azure Databricks pr
 source systems
      |
      v
-bronze ingestion  -> raw Delta assets
+transporte/cruda   -> landing and raw persistence
      |
      v
-silver transforms -> validated, conformed Delta assets
+formateada         -> cleaned and standardized data
      |
      v
-gold publishing   -> curated business-ready datasets
+refinada / gold    -> curated business-ready datasets
+     |
+     +--> Synapse analytical serving when required
      |
      v
 downstream consumers, BI, APIs, or ML workflows
 ```
 
 ## Runtime Layout
+
+Factoria-DataEng accepts two runtime layouts.
+
+### Modern layout
 
 ```text
 .
@@ -49,6 +56,22 @@ downstream consumers, BI, APIs, or ML workflows
 └── docs/
 ```
 
+### Legacy team layout
+
+```text
+.
+├── configuracion/
+├── clases/
+├── Plantillas/
+├── Reprocesos/
+├── OneTime/
+├── Pruebas/
+└── <dominio>/
+    ├── co_ppal_*.py
+    ├── co_dl_*.py
+    └── co_dwh_*.py
+```
+
 ## Responsibility Map
 
 ### Databricks Asset Bundle
@@ -56,6 +79,12 @@ downstream consumers, BI, APIs, or ML workflows
 - owns deployment resources,
 - defines jobs, pipelines, permissions, and variables,
 - and keeps environment-specific configuration explicit.
+
+### Legacy domain orchestrators
+
+- `co_ppal_*` owns orchestration and notebook chaining,
+- `co_dl_*` owns movement across lake zones plus standardization,
+- and `co_dwh_*` owns dimensional, fact, or analytical publication outputs.
 
 ### src/application
 
@@ -87,6 +116,9 @@ downstream consumers, BI, APIs, or ML workflows
 - Lakeflow or Databricks Jobs define orchestration
 - Data quality checks block promotion on critical failures
 - System tables, job logs, and alerts provide operational evidence
+- Mounted `/mnt` routes are operational dependencies in legacy estates
+- Reprocess and one-time flows must remain explicit and auditable
+- Synapse publications are part of the serving contract when consumers depend on them
 
 ## Delivery Expectations
 

@@ -1,4 +1,4 @@
-# ADR-005: Repository Pattern with SQLAlchemy Async
+# ADR-017: Repository Pattern with SQLAlchemy Async
 
 ## Status
 Accepted

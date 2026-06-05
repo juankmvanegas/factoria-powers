@@ -1,4 +1,4 @@
-# ADR-004: Multiple Initialization Types
+# ADR-016: Multiple Initialization Types
 
 ## Status
 Accepted

@@ -14,7 +14,7 @@ user-invocable: false
 
 ## Purpose
 
-Automatically validate that visual changes look correct by capturing screenshots with Playwright CLI. This skill activates **without user intervention** as part of the automatic chain.
+Automatically validate that visual changes look correct by capturing screenshots with Playwright MCP first, and Playwright CLI only as fallback. This skill activates **without user intervention** as part of the automatic chain.
 
 ## Activates automatically when
 
@@ -34,7 +34,9 @@ Automatically validate that visual changes look correct by capturing screenshots
 
 ## Prerequisite
 
-Playwright must be installed:
+Prefer the official Playwright MCP server configured as \`playwright\`.
+
+If browser binaries are missing, install Playwright:
 ```bash
 npx playwright install chromium
 ```
@@ -72,6 +74,15 @@ Modified View/Page              → Corresponding URL
 ```
 
 ### Step 2: Capture screenshot
+
+Prefer MCP browser automation first:
+
+```typescript
+browser_navigate({ url: "http://localhost:4200/{route}" })
+browser_take_screenshot()
+```
+
+Fallback CLI:
 
 ```bash
 npx playwright screenshot http://localhost:4200/{route} \
@@ -144,3 +155,4 @@ If visual validation passes, it automatically invokes the next skill in the chai
 - ALWAYS inform the user if something was auto-corrected (brief, 1 line)
 - ALWAYS continue the automatic chain after successful validation
 - DO NOT generate formal reports — that is the job of `/playwright-cli`
+- Prefer Playwright MCP for the first attempt; only fall back to CLI when MCP is unavailable

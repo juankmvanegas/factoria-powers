@@ -1,4 +1,4 @@
-# ADR-012: import-linter for Architecture Test Enforcement
+# ADR-020: import-linter for Architecture Test Enforcement
 
 ## Status
 Accepted

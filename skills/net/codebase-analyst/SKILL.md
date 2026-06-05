@@ -40,7 +40,7 @@ Verify adherence to Clean Architecture:
 2. **Dependency injection**: Is DI used? Is it well configured?
 3. **Error handling**: Typed exceptions? Consistent try-catch?
 4. **Validation**: Where is validation done? FluentValidation? Data Annotations?
-5. **Mapping**: Manual? AutoMapper? Mapster?
+5. **Mapping**: Manual? Mapster?
 
 ### Step 4: Technical Debt Analysis
 

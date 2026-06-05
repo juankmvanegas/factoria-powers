@@ -18,16 +18,21 @@ Automate visual and interaction testing in the browser. Capture screenshots, nav
 
 ## Philosophy
 
-**CLI is preferred over MCP** because:
-- MCP injects complete snapshots into context (expensive in tokens)
-- CLI saves data to disk (screenshots/YAML) for on-demand inspection
-- Less context pollution, better for known flows
+**Playwright MCP is preferred** because:
+- It gives the agent structured browser state, assertions, storage state, console visibility, and network-aware debugging
+- It fits the same MCP-first model used by Azure DevOps and k6
+- It lets the agent keep browser validation inside the Golden Path instead of treating it as an external ad-hoc script
 
-**Use MCP only when**: interactive exploration or real-time debugging is needed.
+**CLI remains the fallback** when:
+- the MCP server is unavailable
+- the run must be captured as a fully scripted shell artifact
+- a known flow only needs a quick deterministic screenshot/export to disk
 
 ## Prerequisites
 
-Install Playwright (chromium only):
+Prefer the official Playwright MCP server configured as \`playwright\`.
+
+If browser binaries are missing, install Playwright (chromium only):
 ```bash
 npx playwright install chromium
 ```
@@ -199,9 +204,9 @@ The visual feedback loop works like this:
 - Screenshot after (new state)
 - Document the visual change
 
-## MCP (Alternative Usage)
+## MCP (Primary Usage)
 
-When interactive exploration is needed, use Playwright MCP:
+When browser automation is part of the requirement, use Playwright MCP first:
 
 ```typescript
 // Available methods via MCP
@@ -213,8 +218,8 @@ playwright_snapshot()  // Accessibility tree
 ```
 
 **When to use MCP vs CLI:**
-- **CLI**: Known flows, automated QA, CI/CD
-- **MCP**: Interactive debugging, exploration, unknown problems
+- **MCP**: Interactive debugging, QA journeys, assertions, auth/session persistence, network/console inspection
+- **CLI**: Fallback for deterministic shell-only capture flows or when MCP is unavailable
 
 ## Artifact Storage
 
